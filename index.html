@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ระบบค้นหาเอกสารคุณภาพ</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .header-block {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      margin-bottom: 10px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .header img {
+      height: 60px;
+    }
+    .header h2 {
+      color: #3B7168;
+      margin: 0;
+    }
+    .menu-buttons-right {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .menu-buttons-right button {
+      background-color: #3B7168;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .menu-buttons-right button:hover {
+      background-color: #2b5a52;
+    }
+    .search-container {
+      margin: 15px 0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .search-container label {
+      font-weight: bold;
+      margin-right: 5px;
+      align-self: center;
+    }
+    .search-container input {
+      padding: 5px;
+      width: 200px;
+    }
+    #loading {
+      font-style: italic;
+      color: gray;
+      margin-bottom: 10px;
+    }
+    #pagination {
+      margin-top: 15px;
+      text-align: center;
+    }
+    #pagination button {
+      background-color: #3B7168;
+      color: white;
+      padding: 6px 12px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #pagination button:hover {
+      background-color: #2b5a52;
+    }
+    footer {
+      background-color: #3B7168;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header-block">
+    <div class="header">
+      <img src="https://www.nakornthon.com/App_Theme/img/logo.png" alt="โลโก้" />
+      <h2>ระบบค้นหาทะเบียนรายการเอกสารระบบคุณภาพ (Master List Document)</h2>
+    </div>
+    <div class="menu-buttons-right">
+      <button onclick="switchCategory('master')">📋 Master List</button>
+      <button onclick="switchCategory('patient')">🧾 Patient Instruction</button>
+      <button onclick="switchCategory('format')">📑 Format เอกสาร</button>
+    </div>
+  </div>
+
+  <div class="search-container">
+    <label>ค้นหาเอกสาร 🔎</label>
+    <input type="text" id="searchDept" placeholder="ค้นหาหน่วยงาน">
+    <input type="text" id="searchTitle" placeholder="ค้นหารายการเอกสาร">
+  </div>
+
+  <div id="loading">⏳ Loading ข้อมูลเอกสาร กรุณารอสักครู่...</div>
+
+  <table id="documentTable">
+    <thead>
+      <tr>
+        <th onclick="sortByDept()" style="cursor:pointer;">หน่วยงาน ⬍</th>
+        <th>รหัสเอกสาร</th>
+        <th>Rev</th>
+        <th>รายการ</th>
+        <th>ประกาศใช้</th>
+        <th>ประเภทไฟล์</th>
+        <th>Download</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div id="pagination"></div>
+
+  <footer>
+    Developed by Organizational Efficiency Development (OED) Contact : 5015, 5016
+  </footer>
+
+  <script>
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbykNCPNYmKCuCaA7mUcusnHEAQqmSomudpmPJDYp2qucwuzBDR_lNWJH2YYSJaMBo2KuA/exec';
+    let allData = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let sortAsc = true;
+    let currentCategory = 'master';
+
+    function switchCategory(cat) {
+      currentCategory = cat;
+      currentPage = 1;
+      renderTable(filteredData());
+    }
+
+    fetch(GAS_URL)
+      .then(response => response.json())
+      .then(data => {
+        const today = new Date();
+        allData = data.filter(item => {
+          const start = new Date(item.startDate);
+          const end = item.endDate ? new Date(item.endDate) : null;
+          return start <= today && (!end || end >= today);
+        });
+        renderTable(filteredData());
+        document.getElementById("loading").style.display = "none";
+      })
+      .catch(err => {
+        document.getElementById("loading").textContent = "❌ โหลดข้อมูลล้มเหลว: " + err.message;
+      });
+
+    function renderTable(data) {
+      const tbody = document.querySelector("#documentTable tbody");
+      tbody.innerHTML = "";
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageData = data.slice(start, end);
+
+      pageData.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.dept}</td>
+          <td>${item.code}</td>
+          <td>${item.rev}</td>
+          <td>${item.title}</td>
+          <td>${formatDate(item.startDate)}</td>
+          <td>${getFileType(item.link)}</td>
+          <td><a href="${item.link}" target="_blank">Click</a></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      renderPagination(data);
+    }
+
+    function renderPagination(data) {
+      const totalPages = Math.ceil(data.length / itemsPerPage);
+      const pagination = document.getElementById("pagination");
+      pagination.innerHTML = "";
+      if (totalPages <= 1) return;
+
+      const createButton = (text, page) => {
+        const btn = document.createElement("button");
+        btn.textContent = text;
+        btn.onclick = () => {
+          currentPage = page;
+          renderTable(filteredData());
+        };
+        return btn;
+      };
+
+      if (currentPage > 1) pagination.appendChild(createButton("⏮ ก่อนหน้า", currentPage - 1));
+      pagination.appendChild(document.createTextNode(` หน้า ${currentPage} / ${totalPages} `));
+      if (currentPage < totalPages) pagination.appendChild(createButton("ถัดไป ⏭", currentPage + 1));
+    }
+
+    function formatDate(isoDate) {
+      const [y, m, d] = isoDate.split("-");
+      return `${parseInt(d)} ${getMonthName(m)} ${parseInt(y) + 543}`;
+    }
+
+    function getMonthName(mm) {
+      const names = {
+        "01": "ม.ค.", "02": "ก.พ.", "03": "มี.ค.", "04": "เม.ย.",
+        "05": "พ.ค.", "06": "มิ.ย.", "07": "ก.ค.", "08": "ส.ค.",
+        "09": "ก.ย.", "10": "ต.ค.", "11": "พ.ย.", "12": "ธ.ค."
+      };
+      return names[mm] || mm;
+    }
+
+    function getFileType(link) {
+      const ext = link.split('.').pop().toLowerCase();
+      return ext.toUpperCase();
+    }
+
+    function filteredData() {
+      const dept = document.getElementById("searchDept").value.toLowerCase();
+      const title = document.getElementById("searchTitle").value.toLowerCase();
+      return allData.filter(item =>
+        item.dept.toLowerCase().includes(dept) &&
+        item.title.toLowerCase().includes(title)
+      );
+    }
+
+    document.getElementById("searchDept").addEventListener("input", () => {
+      currentPage = 1;
+      renderTable(filteredData());
+    });
+
+    document.getElementById("searchTitle").addEventListener("input", () => {
+      currentPage = 1;
+      renderTable(filteredData());
+    });
+
+    function sortByDept() {
+      allData.sort((a, b) => {
+        const nameA = a.dept.toLowerCase();
+        const nameB = b.dept.toLowerCase();
+        if (nameA < nameB) return sortAsc ? -1 : 1;
+        if (nameA > nameB) return sortAsc ? 1 : -1;
+        return 0;
+      });
+      sortAsc = !sortAsc;
+      currentPage = 1;
+      renderTable(filteredData());
+    }
+  </script>
+</body>
+</html>

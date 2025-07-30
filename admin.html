@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin เพิ่มเอกสาร</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .hidden { display: none; }
+    .status { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>เข้าสู่ระบบผู้ดูแล (Admin)</h2>
+
+  <!-- 🔐 ใส่รหัสผ่านก่อน -->
+  <div id="passwordSection">
+    <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่าน">
+    <button onclick="checkPassword()">เข้าสู่ระบบ</button>
+    <div id="passwordStatus" class="status"></div>
+  </div>
+
+  <!-- 🧾 แบบฟอร์มหลัก (เริ่มต้นซ่อน) -->
+  <div id="adminPanel" class="hidden">
+    <h2>จัดการรายการเอกสาร</h2>
+
+    <!-- 🔍 ค้นหารหัสเอกสาร -->
+    <label>🔎 ค้นหาด้วยรหัสเอกสาร:</label>
+    <input type="text" id="searchCode" placeholder="กรอกรหัสเอกสาร">
+    <button onclick="searchDoc()">ค้นหา</button>
+
+    <hr>
+
+    <!-- 📝 ฟอร์ม -->
+    <form id="docForm">
+      <label>หน่วยงาน:</label><br>
+      <input type="text" id="dept" required><br>
+
+      <label>รหัสเอกสาร:</label><br>
+      <input type="text" id="code" required><br>
+
+      <label>Rev:</label><br>
+      <input type="text" id="rev" required><br>
+
+      <label>รายการ:</label><br>
+      <input type="text" id="title" required><br>
+
+      <label>📅 วันที่เริ่มใช้:</label><br>
+      <input type="date" id="startDate" required><br>
+
+      <label>📅 วันที่สิ้นสุด:</label><br>
+      <input type="date" id="endDate" required><br>
+
+      <label>🔗 ลิงก์หรือ path:</label><br>
+      <input type="text" id="link" required><br><br>
+
+      <button type="button" onclick="addDoc()">💾 บันทึก / แก้ไข</button>
+      <button type="button" onclick="deleteDoc()">🗑️ ลบ</button>
+    </form>
+
+    <pre id="status" class="status"></pre>
+  </div>
+
+  <script>
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbykNCPNYmKCuCaA7mUcusnHEAQqmSomudpmPJDYp2qucwuzBDR_lNWJH2YYSJaMBo2KuA/exec';
+    const ADMIN_PASSWORD = '1234'; // ✅ เปลี่ยนรหัสผ่านตรงนี้ได้
+
+    let currentData = [];
+
+    // ✅ ตรวจรหัสผ่านก่อนแสดงฟอร์ม
+    function checkPassword() {
+      const input = document.getElementById("adminPassword").value;
+      if (input === ADMIN_PASSWORD) {
+        document.getElementById("passwordSection").style.display = "none";
+        document.getElementById("adminPanel").classList.remove("hidden");
+        loadData();
+      } else {
+        document.getElementById("passwordStatus").textContent = "❌ รหัสผ่านไม่ถูกต้อง";
+      }
+    }
+
+    function loadData() {
+      fetch(GAS_URL)
+        .then(res => res.json())
+        .then(data => {
+          currentData = data;
+        });
+    }
+
+    function searchDoc() {
+      const code = document.getElementById('searchCode').value.trim();
+      const found = currentData.find(item => item.code === code);
+      if (found) {
+        document.getElementById('dept').value = found.dept;
+        document.getElementById('code').value = found.code;
+        document.getElementById('rev').value = found.rev;
+        document.getElementById('title').value = found.title;
+        document.getElementById('startDate').value = found.startDate;
+        document.getElementById('endDate').value = found.endDate;
+        document.getElementById('link').value = found.link;
+        document.getElementById("status").textContent = "✏️ โหลดข้อมูลสำเร็จ พร้อมแก้ไข";
+      } else {
+        document.getElementById("status").textContent = "❌ ไม่พบรหัสเอกสารนี้";
+      }
+    }
+
+    async function addDoc() {
+      if (!document.getElementById('docForm').checkValidity()) {
+        document.getElementById("status").textContent = "⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง";
+        return;
+      }
+
+      const doc = {
+        dept: document.getElementById('dept').value,
+        code: document.getElementById('code').value,
+        rev: document.getElementById('rev').value,
+        title: document.getElementById('title').value,
+        startDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        link: document.getElementById('link').value
+      };
+
+      const index = currentData.findIndex(item => item.code === doc.code);
+      if (index !== -1) {
+        currentData[index] = doc;
+      } else {
+        currentData.push(doc);
+      }
+
+      const res = await fetch(GAS_URL, {
+        method: "POST",
+        body: JSON.stringify(currentData)
+      });
+
+      const result = await res.json();
+      document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";
+      document.getElementById('docForm').reset();
+    }
+
+    async function deleteDoc() {
+      const code = document.getElementById('code').value.trim();
+      if (!code) {
+        document.getElementById("status").textContent = "⚠️ ต้องใส่รหัสเอกสารก่อนลบ";
+        return;
+      }
+
+      const index = currentData.findIndex(item => item.code === code);
+      if (index === -1) {
+        document.getElementById("status").textContent = "❌ ไม่พบเอกสารที่จะลบ";
+        return;
+      }
+
+      if (!confirm(`คุณแน่ใจว่าต้องการลบเอกสาร ${code} ?`)) return;
+
+      currentData.splice(index, 1);
+
+      const res = await fetch(GAS_URL, {
+        method: "POST",
+        body: JSON.stringify(currentData)
+      });
+
+      const result = await res.json();
+      document.getElementById("status").textContent = "🗑️ ลบสำเร็จ";
+      document.getElementById('docForm').reset();
+    }
+  </script>
+</body>
+</html>
