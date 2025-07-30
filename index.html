@@ -98,7 +98,6 @@
     <div class="menu-buttons-right">
       <button onclick="switchCategory('master')">📋 Master List</button>
       <button onclick="switchCategory('patient')">🧾 Patient Instruction</button>
-      <button onclick="switchCategory('format')">📑 Format เอกสาร</button>
     </div>
   </div>
 
@@ -137,10 +136,8 @@
     let currentPage = 1;
     const itemsPerPage = 10;
     let sortAsc = true;
-    let currentCategory = 'master';
 
     function switchCategory(cat) {
-      currentCategory = cat;
       currentPage = 1;
       renderTable(filteredData());
     }
