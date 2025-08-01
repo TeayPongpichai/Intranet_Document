@@ -7,6 +7,15 @@
   <style>
     .hidden { display: none; }
     .status { margin-top: 10px; font-weight: bold; }
+    .category-radio {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .category-radio label {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -23,6 +32,13 @@
   <div id="adminPanel" class="hidden">
     <h2>จัดการรายการเอกสาร</h2>
 
+    <!-- ✅ หมวดหมู่เอกสาร (บรรทัดเดียว) -->
+    <div class="category-radio">
+      <label>📂 หมวดหมู่:</label>
+      <label><input type="radio" name="category" value="master" checked> 📋 Master List</label>
+      <label><input type="radio" name="category" value="patient"> 🧾 Patient Instruction</label>
+    </div>
+
     <!-- 🔍 ค้นหารหัสเอกสาร -->
     <label>🔎 ค้นหาด้วยรหัสเอกสาร:</label>
     <input type="text" id="searchCode" placeholder="กรอกรหัสเอกสาร">
@@ -32,12 +48,6 @@
 
     <!-- 📝 ฟอร์ม -->
     <form id="docForm">
-      <label>📁 หมวดหมู่:</label><br>
-      <select id="category" required>
-        <option value="master">📋 Master List</option>
-        <option value="patient">🧾 Patient Instruction</option>
-      </select><br><br>
-
       <label>หน่วยงาน:</label><br>
       <input type="text" id="dept" required><br>
 
@@ -54,7 +64,7 @@
       <input type="date" id="startDate" required><br>
 
       <label>📅 วันที่สิ้นสุด:</label><br>
-      <input type="date" id="endDate" required><br>
+      <input type="date" id="endDate"><br>
 
       <label>🔗 ลิงก์หรือ path:</label><br>
       <input type="text" id="link" required><br><br>
@@ -69,6 +79,7 @@
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbykNCPNYmKCuCaA7mUcusnHEAQqmSomudpmPJDYp2qucwuzBDR_lNWJH2YYSJaMBo2KuA/exec';
     const ADMIN_PASSWORD = '1234';
+
     let currentData = [];
 
     function checkPassword() {
@@ -94,7 +105,6 @@
       const code = document.getElementById('searchCode').value.trim();
       const found = currentData.find(item => item.code === code);
       if (found) {
-        document.getElementById('category').value = found.category || 'master';
         document.getElementById('dept').value = found.dept;
         document.getElementById('code').value = found.code;
         document.getElementById('rev').value = found.rev;
@@ -102,6 +112,11 @@
         document.getElementById('startDate').value = found.startDate;
         document.getElementById('endDate').value = found.endDate;
         document.getElementById('link').value = found.link;
+
+        // ✅ ตั้งค่า radio button ตาม category
+        const radio = document.querySelector(`input[name="category"][value="${found.category}"]`);
+        if (radio) radio.checked = true;
+
         document.getElementById("status").textContent = "✏️ โหลดข้อมูลสำเร็จ พร้อมแก้ไข";
       } else {
         document.getElementById("status").textContent = "❌ ไม่พบรหัสเอกสารนี้";
@@ -115,14 +130,14 @@
       }
 
       const doc = {
-        category: document.getElementById('category').value,
         dept: document.getElementById('dept').value,
         code: document.getElementById('code').value,
         rev: document.getElementById('rev').value,
         title: document.getElementById('title').value,
         startDate: document.getElementById('startDate').value,
         endDate: document.getElementById('endDate').value,
-        link: document.getElementById('link').value
+        link: document.getElementById('link').value,
+        category: document.querySelector('input[name="category"]:checked').value
       };
 
       const index = currentData.findIndex(item => item.code === doc.code);
@@ -137,7 +152,7 @@
         body: JSON.stringify(currentData)
       });
 
-      const result = await res.json();
+      await res.json();
       document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";
       document.getElementById('docForm').reset();
     }
@@ -164,7 +179,7 @@
         body: JSON.stringify(currentData)
       });
 
-      const result = await res.json();
+      await res.json();
       document.getElementById("status").textContent = "🗑️ ลบสำเร็จ";
       document.getElementById('docForm').reset();
     }
