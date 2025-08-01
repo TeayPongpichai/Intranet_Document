@@ -32,6 +32,12 @@
 
     <!-- 📝 ฟอร์ม -->
     <form id="docForm">
+      <label>📁 หมวดหมู่:</label><br>
+      <select id="category" required>
+        <option value="master">📋 Master List</option>
+        <option value="patient">🧾 Patient Instruction</option>
+      </select><br><br>
+
       <label>หน่วยงาน:</label><br>
       <input type="text" id="dept" required><br>
 
@@ -62,11 +68,9 @@
 
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbykNCPNYmKCuCaA7mUcusnHEAQqmSomudpmPJDYp2qucwuzBDR_lNWJH2YYSJaMBo2KuA/exec';
-    const ADMIN_PASSWORD = '1234'; // ✅ เปลี่ยนรหัสผ่านตรงนี้ได้
-
+    const ADMIN_PASSWORD = '1234';
     let currentData = [];
 
-    // ✅ ตรวจรหัสผ่านก่อนแสดงฟอร์ม
     function checkPassword() {
       const input = document.getElementById("adminPassword").value;
       if (input === ADMIN_PASSWORD) {
@@ -90,6 +94,7 @@
       const code = document.getElementById('searchCode').value.trim();
       const found = currentData.find(item => item.code === code);
       if (found) {
+        document.getElementById('category').value = found.category || 'master';
         document.getElementById('dept').value = found.dept;
         document.getElementById('code').value = found.code;
         document.getElementById('rev').value = found.rev;
@@ -110,6 +115,7 @@
       }
 
       const doc = {
+        category: document.getElementById('category').value,
         dept: document.getElementById('dept').value,
         code: document.getElementById('code').value,
         rev: document.getElementById('rev').value,
