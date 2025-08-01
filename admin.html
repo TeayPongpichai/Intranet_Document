@@ -43,6 +43,7 @@
     <label>🔎 ค้นหาด้วยรหัสเอกสาร:</label>
     <input type="text" id="searchCode" placeholder="กรอกรหัสเอกสาร">
     <button onclick="searchDoc()">ค้นหา</button>
+    <button onclick="clearForm()">ล้างข้อมูล</button>
 
     <hr>
 
@@ -183,6 +184,20 @@
       document.getElementById("status").textContent = "🗑️ ลบสำเร็จ";
       document.getElementById('docForm').reset();
     }
+    function clearForm() {
+  document.getElementById('docForm').reset();
+  document.getElementById('searchCode').value = '';
+  document.getElementById("status").textContent = '';
+  
+  // รีเซ็ตหมวดหมู่กลับเป็น master
+  document.querySelector('input[name="category"][value="master"]').checked = true;
+}
+document.getElementById("adminPassword").addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    checkPassword();
+  }
+});
   </script>
 </body>
 </html>
