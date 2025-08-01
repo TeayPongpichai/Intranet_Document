@@ -20,10 +20,11 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
+      font-size: 0.9em;
     }
     th, td {
       border: 1px solid #ccc;
-      padding: 8px;
+      padding: 6px;
       text-align: left;
     }
     thead {
@@ -34,10 +35,23 @@
       font-weight: bold;
     }
     .expired-header {
-      margin-top: 30px;
-      font-size: 1.2em;
+      margin-top: 10px;
+      font-size: 1em;
       font-weight: bold;
       color: #3B7168;
+    }
+    .flex-container {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .left-form {
+      flex: 6;
+      min-width: 0;
+    }
+    .right-expired {
+      flex: 4;
+      min-width: 0;
     }
   </style>
 </head>
@@ -66,52 +80,56 @@
 
     <hr>
 
-    <form id="docForm">
-      <label>หน่วยงาน:</label><br>
-      <input type="text" id="dept" required><br>
+    <div class="flex-container">
+      <div class="left-form">
+        <form id="docForm">
+          <label>หน่วยงาน:</label><br>
+          <input type="text" id="dept" required><br>
 
-      <label>รหัสเอกสาร:</label><br>
-      <input type="text" id="code" required><br>
+          <label>รหัสเอกสาร:</label><br>
+          <input type="text" id="code" required><br>
 
-      <label>Rev:</label><br>
-      <input type="text" id="rev" required><br>
+          <label>Rev:</label><br>
+          <input type="text" id="rev" required><br>
 
-      <label>รายการ:</label><br>
-      <input type="text" id="title" required><br>
+          <label>รายการ:</label><br>
+          <input type="text" id="title" required><br>
 
-      <label>📅 วันที่เริ่มใช้:</label><br>
-      <input type="date" id="startDate" required><br>
+          <label>📅 วันที่เริ่มใช้:</label><br>
+          <input type="date" id="startDate" required><br>
 
-      <label>📅 วันที่สิ้นสุด:</label><br>
-      <input type="date" id="endDate"><br>
+          <label>📅 วันที่สิ้นสุด:</label><br>
+          <input type="date" id="endDate"><br>
 
-      <label>📄 ประเภทไฟล์ (เช่น PDF, DOCX):</label><br>
-      <input type="text" id="fileType"><br>
+          <label>📄 ประเภทไฟล์ (เช่น PDF, DOCX):</label><br>
+          <input type="text" id="fileType"><br>
 
-      <label>🔗 ลิงก์หรือ path:</label><br>
-      <input type="text" id="link" required><br><br>
+          <label>🔗 ลิงก์หรือ path:</label><br>
+          <input type="text" id="link" required><br><br>
 
-      <button type="button" onclick="addDoc()">💾 บันทึก / แก้ไข</button>
-      <button type="button" onclick="deleteDoc()">🗑️ ลบ</button>
-    </form>
+          <button type="button" onclick="addDoc()">💾 บันทึก / แก้ไข</button>
+          <button type="button" onclick="deleteDoc()">🗑️ ลบ</button>
+        </form>
 
-    <pre id="status" class="status"></pre>
+        <pre id="status" class="status"></pre>
+      </div>
 
-    <div id="expiredListContainer">
-      <div class="expired-header">📁 รายการเอกสารที่หมดอายุแล้ว</div>
-      <table id="expiredTable">
-        <thead>
-          <tr>
-            <th>หน่วยงาน</th>
-            <th>รหัสเอกสาร</th>
-            <th>ประกาศใช้</th>
-            <th>วันที่สิ้นสุด</th>
-            <th>ประเภทไฟล์</th>
-            <th>Download</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+      <div class="right-expired">
+        <div class="expired-header">📁 รายการเอกสารที่หมดอายุแล้ว</div>
+        <table id="expiredTable">
+          <thead>
+            <tr>
+              <th>หน่วยงาน</th>
+              <th>รหัสเอกสาร</th>
+              <th>ประกาศใช้</th>
+              <th>วันที่สิ้นสุด</th>
+              <th>ประเภทไฟล์</th>
+              <th>Download</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
