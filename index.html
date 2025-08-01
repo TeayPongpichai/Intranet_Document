@@ -175,7 +175,7 @@
           <td>${item.rev}</td>
           <td>${item.title}</td>
           <td>${formatDate(item.startDate)}</td>
-          <td>${getFileType(item.link)}</td>
+          <td>${item.fileType || '-'}</td>
           <td><a href="${item.link}" target="_blank">Click</a></td>
         `;
         tbody.appendChild(row);
