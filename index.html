@@ -136,8 +136,10 @@
     let currentPage = 1;
     const itemsPerPage = 10;
     let sortAsc = true;
+    let currentCategory = 'master'; // ✅ ตั้งค่า default category
 
     function switchCategory(cat) {
+      currentCategory = cat;
       currentPage = 1;
       renderTable(filteredData());
     }
@@ -151,7 +153,7 @@
           const end = item.endDate ? new Date(item.endDate) : null;
           return start <= today && (!end || end >= today);
         });
-        renderTable(filteredData());
+        switchCategory('master'); // ✅ เริ่มต้นด้วย Master List
         document.getElementById("loading").style.display = "none";
       })
       .catch(err => {
@@ -225,10 +227,12 @@
     function filteredData() {
       const dept = document.getElementById("searchDept").value.toLowerCase();
       const title = document.getElementById("searchTitle").value.toLowerCase();
-      return allData.filter(item =>
-        item.dept.toLowerCase().includes(dept) &&
-        item.title.toLowerCase().includes(title)
-      );
+      return allData
+        .filter(item => item.category === currentCategory)
+        .filter(item =>
+          item.dept.toLowerCase().includes(dept) &&
+          item.title.toLowerCase().includes(title)
+        );
     }
 
     document.getElementById("searchDept").addEventListener("input", () => {
