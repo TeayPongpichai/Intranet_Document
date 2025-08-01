@@ -139,10 +139,28 @@
     let currentCategory = 'master'; // ✅ ตั้งค่า default category
 
     function switchCategory(cat) {
-      currentCategory = cat;
-      currentPage = 1;
+  currentCategory = cat;
+  currentPage = 1;
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("loading").textContent = "⏳ กำลังโหลดข้อมูลใหม่ กรุณารอสักครู่...";
+
+  fetch(GAS_URL)
+    .then(response => response.json())
+    .then(data => {
+      const today = new Date();
+      allData = data.filter(item => {
+        const start = new Date(item.startDate);
+        const end = item.endDate ? new Date(item.endDate) : null;
+        return start <= today && (!end || end >= today);
+      });
       renderTable(filteredData());
-    }
+      document.getElementById("loading").style.display = "none";
+    })
+    .catch(err => {
+      document.getElementById("loading").textContent = "❌ โหลดข้อมูลล้มเหลว: " + err.message;
+    });
+}
+
 
     fetch(GAS_URL)
       .then(response => response.json())
