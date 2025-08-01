@@ -21,33 +21,28 @@
 <body>
   <h2>เข้าสู่ระบบผู้ดูแล (Admin)</h2>
 
-  <!-- 🔐 ใส่รหัสผ่านก่อน -->
   <div id="passwordSection">
     <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่าน">
     <button onclick="checkPassword()">เข้าสู่ระบบ</button>
     <div id="passwordStatus" class="status"></div>
   </div>
 
-  <!-- 🧾 แบบฟอร์มหลัก (เริ่มต้นซ่อน) -->
   <div id="adminPanel" class="hidden">
     <h2>จัดการรายการเอกสาร</h2>
 
-    <!-- ✅ หมวดหมู่เอกสาร (บรรทัดเดียว) -->
     <div class="category-radio">
       <label>📂 หมวดหมู่:</label>
       <label><input type="radio" name="category" value="master" checked> 📋 Master List</label>
       <label><input type="radio" name="category" value="patient"> 🧾 Patient Instruction</label>
     </div>
 
-    <!-- 🔍 ค้นหารหัสเอกสาร -->
     <label>🔎 ค้นหาด้วยรหัสเอกสาร:</label>
     <input type="text" id="searchCode" placeholder="กรอกรหัสเอกสาร">
     <button onclick="searchDoc()">ค้นหา</button>
-    <button onclick="clearForm()">ล้างข้อมูล</button>
+    <button onclick="clearForm()">🧹 ล้าง</button>
 
     <hr>
 
-    <!-- 📝 ฟอร์ม -->
     <form id="docForm">
       <label>หน่วยงาน:</label><br>
       <input type="text" id="dept" required><br>
@@ -95,11 +90,9 @@
     }
 
     function loadData() {
-      fetch(GAS_URL)
+      return fetch(GAS_URL)
         .then(res => res.json())
-        .then(data => {
-          currentData = data;
-        });
+        .then(data => { currentData = data; });
     }
 
     function searchDoc() {
@@ -113,15 +106,19 @@
         document.getElementById('startDate').value = found.startDate;
         document.getElementById('endDate').value = found.endDate;
         document.getElementById('link').value = found.link;
-
-        // ✅ ตั้งค่า radio button ตาม category
         const radio = document.querySelector(`input[name="category"][value="${found.category}"]`);
         if (radio) radio.checked = true;
-
         document.getElementById("status").textContent = "✏️ โหลดข้อมูลสำเร็จ พร้อมแก้ไข";
       } else {
         document.getElementById("status").textContent = "❌ ไม่พบรหัสเอกสารนี้";
       }
+    }
+
+    function clearForm() {
+      document.getElementById('docForm').reset();
+      document.getElementById('searchCode').value = "";
+      document.querySelector('input[name="category"][value="master"]').checked = true;
+      document.getElementById("status").textContent = "🧼 เคลียร์ข้อมูลแล้ว";
     }
 
     async function addDoc() {
@@ -129,6 +126,7 @@
         document.getElementById("status").textContent = "⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง";
         return;
       }
+      await loadData();
 
       const doc = {
         dept: document.getElementById('dept').value,
@@ -154,8 +152,8 @@
       });
 
       await res.json();
-      document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";
-      document.getElementById('docForm').reset();
+      clearForm();  // ✅ ล้างก่อน
+      document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";  // ✅ ไม่โดนล้างทับ
     }
 
     async function deleteDoc() {
@@ -164,40 +162,29 @@
         document.getElementById("status").textContent = "⚠️ ต้องใส่รหัสเอกสารก่อนลบ";
         return;
       }
-
+      await loadData();
       const index = currentData.findIndex(item => item.code === code);
       if (index === -1) {
         document.getElementById("status").textContent = "❌ ไม่พบเอกสารที่จะลบ";
         return;
       }
-
       if (!confirm(`คุณแน่ใจว่าต้องการลบเอกสาร ${code} ?`)) return;
-
       currentData.splice(index, 1);
-
       const res = await fetch(GAS_URL, {
         method: "POST",
         body: JSON.stringify(currentData)
       });
-
       await res.json();
+      clearForm();
       document.getElementById("status").textContent = "🗑️ ลบสำเร็จ";
-      document.getElementById('docForm').reset();
     }
-    function clearForm() {
-  document.getElementById('docForm').reset();
-  document.getElementById('searchCode').value = '';
-  document.getElementById("status").textContent = '';
-  
-  // รีเซ็ตหมวดหมู่กลับเป็น master
-  document.querySelector('input[name="category"][value="master"]').checked = true;
-}
-document.getElementById("adminPassword").addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    checkPassword();
-  }
-});
+
+    document.getElementById("adminPassword").addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        checkPassword();
+      }
+    });
   </script>
 </body>
 </html>
