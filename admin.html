@@ -16,6 +16,29 @@
     .category-radio label {
       font-weight: bold;
     }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    thead {
+      background-color: #3B7168;
+      color: white;
+    }
+    th {
+      font-weight: bold;
+    }
+    .expired-header {
+      margin-top: 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #3B7168;
+    }
   </style>
 </head>
 <body>
@@ -73,12 +96,28 @@
     </form>
 
     <pre id="status" class="status"></pre>
+
+    <div id="expiredListContainer">
+      <div class="expired-header">📁 รายการเอกสารที่หมดอายุแล้ว</div>
+      <table id="expiredTable">
+        <thead>
+          <tr>
+            <th>หน่วยงาน</th>
+            <th>รหัสเอกสาร</th>
+            <th>ประกาศใช้</th>
+            <th>วันที่สิ้นสุด</th>
+            <th>ประเภทไฟล์</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbykNCPNYmKCuCaA7mUcusnHEAQqmSomudpmPJDYp2qucwuzBDR_lNWJH2YYSJaMBo2KuA/exec';
     const ADMIN_PASSWORD = '1234';
-
     let currentData = [];
 
     function checkPassword() {
@@ -93,9 +132,31 @@
     }
 
     function loadData() {
-      return fetch(GAS_URL)
+      fetch(GAS_URL)
         .then(res => res.json())
-        .then(data => { currentData = data; });
+        .then(data => {
+          currentData = data;
+          renderExpiredTable();
+        });
+    }
+
+    function renderExpiredTable() {
+      const tbody = document.querySelector("#expiredTable tbody");
+      tbody.innerHTML = "";
+      const today = new Date();
+      const expired = currentData.filter(item => item.endDate && new Date(item.endDate) < today);
+      expired.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.dept}</td>
+          <td>${item.code}</td>
+          <td>${item.startDate}</td>
+          <td>${item.endDate}</td>
+          <td>${item.fileType || '-'}</td>
+          <td><a href="${item.link}" target="_blank">Click</a></td>
+        `;
+        tbody.appendChild(row);
+      });
     }
 
     function searchDoc() {
@@ -158,8 +219,9 @@
       });
 
       await res.json();
-      clearForm();  // ✅ ล้างก่อน
-      document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";  // ✅ ไม่โดนล้างทับ
+      clearForm();
+      document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";
+      loadData();
     }
 
     async function deleteDoc() {
@@ -183,6 +245,7 @@
       await res.json();
       clearForm();
       document.getElementById("status").textContent = "🗑️ ลบสำเร็จ";
+      loadData();
     }
 
     document.getElementById("adminPassword").addEventListener("keypress", function (e) {
