@@ -16,6 +16,17 @@
     .category-radio label {
       font-weight: bold;
     }
+    .filetype-radio {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .filetype-radio label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -42,15 +53,15 @@
     }
     .flex-container {
       display: flex;
-      gap: 5px; /* ลดระยะห่างลงอีก */
+      gap: 5px;
       align-items: flex-start;
     }
     .left-form {
-      flex: 3.5;
+      flex: 4.5;
       min-width: 0;
     }
     .right-expired {
-      flex: 6.5;
+      flex: 5.5;
       min-width: 0;
     }
   </style>
@@ -101,8 +112,14 @@
           <label>📅 วันที่สิ้นสุด:</label><br>
           <input type="date" id="endDate"><br>
 
-          <label>📄 ประเภทไฟล์ (เช่น PDF, DOCX):</label><br>
-          <input type="text" id="fileType"><br>
+          <label>📄 ประเภทไฟล์:</label>
+          <div class="filetype-radio">
+            <label><input type="radio" name="fileTypeRadio" value="PDF">PDF</label>
+            <label><input type="radio" name="fileTypeRadio" value="WORD">WORD</label>
+            <label><input type="radio" name="fileTypeRadio" value="EXCEL">EXCEL</label>
+            <label><input type="radio" name="fileTypeRadio" value="other">อื่น ๆ:</label>
+            <input type="text" id="fileType" placeholder="ระบุ เช่น PPT, TXT" disabled>
+          </div>
 
           <label>🔗 ลิงก์หรือ path:</label><br>
           <input type="text" id="link" required><br><br>
@@ -204,6 +221,19 @@
       document.querySelector('input[name="category"][value="master"]').checked = true;
       document.getElementById("status").textContent = "🧼 เคลียร์ข้อมูลแล้ว";
     }
+
+    document.querySelectorAll('input[name="fileTypeRadio"]').forEach(radio => {
+      radio.addEventListener('change', function () {
+        const fileTypeInput = document.getElementById('fileType');
+        if (this.value === 'other') {
+          fileTypeInput.disabled = false;
+          fileTypeInput.value = '';
+        } else {
+          fileTypeInput.disabled = true;
+          fileTypeInput.value = this.value;
+        }
+      });
+    });
 
     async function addDoc() {
       if (!document.getElementById('docForm').checkValidity()) {
