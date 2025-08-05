@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>ระบบค้นหาเอกสารคุณภาพ</title>
-  <link rel="stylesheet" href="style.css">
 <style>
+  /* CSS เดิมในไฟล์ index.html */
   .header-block {
     display: flex;
     flex-direction: column;
@@ -88,23 +88,148 @@
     font-weight: bold;
   }
 
-  /* ✅ จัดหัวตารางให้อยู่ตรงกลาง */
   #documentTable th {
     text-align: center;
   }
-
-  /* ✅ จัดเนื้อหาในทุกคอลัมน์ให้อยู่ตรงกลาง */
   #documentTable td {
     text-align: center;
   }
-
-  /* ✅ ยกเว้นคอลัมน์ "รายการ" ให้อยู่ชิดซ้าย (คอลัมน์ที่ 4) */
   #documentTable td:nth-child(4) {
     text-align: left;
   }
-  /* ✅ ซ่อนตารางขณะกำลังโหลด */
   #documentTable.loading {
     display: none;
+  }
+
+  /* 🎯 CSS จาก style.css เริ่มตรงนี้ */
+
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eaf2ec;
+    color: #003f2d;
+    margin: 30px;
+  }
+
+  h2 {
+    color: #003f2d;
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  }
+
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+  }
+
+  th {
+    background-color: #3B7168;
+    color: white;
+  }
+
+  button, .green-button {
+    background-color: #3B7168;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background-color: #2b5a52;
+  }
+
+  input[type="text"], input[type="date"], input[type="password"] {
+    padding: 6px;
+    margin: 4px 0;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  a {
+    color: #3B7168;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .status {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #00695c;
+  }
+
+  .status.error {
+    color: red;
+  }
+
+  .status.success {
+    color: green;
+  }
+
+  .status.loading {
+    color: #888;
+    font-style: italic;
+  }
+
+  form {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #c8e6c9;
+    border-radius: 6px;
+    max-width: 600px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  }
+
+  form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #004d40;
+  }
+
+  form input {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+      width: 100%;
+    }
+
+    th {
+      text-align: right;
+      padding-right: 30%;
+    }
+
+    td {
+      text-align: left;
+      padding-left: 5%;
+    }
+
+    input[type="text"], input[type="date"], input[type="password"] {
+      width: 100%;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 5px;
+    }
   }
 </style>
 </head>
