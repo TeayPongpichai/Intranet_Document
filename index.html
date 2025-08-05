@@ -4,90 +4,105 @@
   <meta charset="UTF-8">
   <title>ระบบค้นหาเอกสารคุณภาพ</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .header-block {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      margin-bottom: 10px;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .header img {
-      height: 60px;
-    }
-    .header h2 {
-      color: #3B7168;
-      margin: 0;
-    }
-    .menu-buttons-right {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 5px;
-    }
-    .menu-buttons-right button {
-      background-color: #3B7168;
-      color: white;
-      padding: 6px 12px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .menu-buttons-right button:hover {
-      background-color: #2b5a52;
-    }
-    .search-container {
-      margin: 15px 0;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-    .search-container label {
-      font-weight: bold;
-      margin-right: 5px;
-      align-self: center;
-    }
-    .search-container input {
-      padding: 5px;
-      width: 200px;
-    }
-    #loading {
-      font-style: italic;
-      color: gray;
-      margin-bottom: 10px;
-    }
-    #pagination {
-      margin-top: 15px;
-      text-align: center;
-    }
-    #pagination button {
-      background-color: #3B7168;
-      color: white;
-      padding: 6px 12px;
-      margin: 0 5px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    #pagination button:hover {
-      background-color: #2b5a52;
-    }
-    footer {
-      background-color: #3B7168;
-      color: white;
-      padding: 10px;
-      text-align: center;
-      margin-top: 30px;
-      font-size: 1em;
-      font-weight: bold;
-    }
-  </style>
+<style>
+  .header-block {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 10px;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  .header img {
+    height: 60px;
+  }
+  .header h2 {
+    color: #3B7168;
+    margin: 0;
+  }
+  .menu-buttons-right {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 5px;
+  }
+  .menu-buttons-right button {
+    background-color: #3B7168;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .menu-buttons-right button:hover {
+    background-color: #2b5a52;
+  }
+  .search-container {
+    margin: 15px 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .search-container label {
+    font-weight: bold;
+    margin-right: 5px;
+    align-self: center;
+  }
+  .search-container input {
+    padding: 5px;
+    width: 200px;
+  }
+  #loading {
+    font-style: italic;
+    color: gray;
+    margin-bottom: 10px;
+  }
+  #pagination {
+    margin-top: 15px;
+    text-align: center;
+  }
+  #pagination button {
+    background-color: #3B7168;
+    color: white;
+    padding: 6px 12px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  #pagination button:hover {
+    background-color: #2b5a52;
+  }
+  footer {
+    background-color: #3B7168;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 1em;
+    font-weight: bold;
+  }
+
+  /* ✅ จัดหัวตารางให้อยู่ตรงกลาง */
+  #documentTable th {
+    text-align: center;
+  }
+
+  /* ✅ จัดเนื้อหาในทุกคอลัมน์ให้อยู่ตรงกลาง */
+  #documentTable td {
+    text-align: center;
+  }
+
+  /* ✅ ยกเว้นคอลัมน์ "รายการ" ให้อยู่ชิดซ้าย (คอลัมน์ที่ 4) */
+  #documentTable td:nth-child(4) {
+    text-align: left;
+  }
+</style>
 </head>
 <body>
   <div class="header-block">
@@ -110,6 +125,15 @@
   <div id="loading">⏳ Loading ข้อมูลเอกสาร กรุณารอสักครู่...</div>
 
   <table id="documentTable">
+    <colgroup>
+      <col style="width: 60px;">
+      <col style="width: 120px;">
+      <col style="width: 60px;">
+      <col style="width: 360px;">
+      <col style="width: 120px;">
+      <col style="width: 120px;">
+      <col style="width: 60px;">
+    </colgroup>
     <thead>
       <tr>
         <th onclick="sortByDept()" style="cursor:pointer;">หน่วยงาน ⬍</th>
@@ -139,28 +163,27 @@
     let currentCategory = 'master'; // ✅ ตั้งค่า default category
 
     function switchCategory(cat) {
-  currentCategory = cat;
-  currentPage = 1;
-  document.getElementById("loading").style.display = "block";
-  document.getElementById("loading").textContent = "⏳ กำลังโหลดข้อมูลใหม่ กรุณารอสักครู่...";
+      currentCategory = cat;
+      currentPage = 1;
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("loading").textContent = "⏳ กำลังโหลดข้อมูลใหม่ กรุณารอสักครู่...";
 
-  fetch(GAS_URL)
-    .then(response => response.json())
-    .then(data => {
-      const today = new Date();
-      allData = data.filter(item => {
-        const start = new Date(item.startDate);
-        const end = item.endDate ? new Date(item.endDate) : null;
-        return start <= today && (!end || end >= today);
-      });
-      renderTable(filteredData());
-      document.getElementById("loading").style.display = "none";
-    })
-    .catch(err => {
-      document.getElementById("loading").textContent = "❌ โหลดข้อมูลล้มเหลว: " + err.message;
-    });
-}
-
+      fetch(GAS_URL)
+        .then(response => response.json())
+        .then(data => {
+          const today = new Date();
+          allData = data.filter(item => {
+            const start = new Date(item.startDate);
+            const end = item.endDate ? new Date(item.endDate) : null;
+            return start <= today && (!end || end >= today);
+          });
+          renderTable(filteredData());
+          document.getElementById("loading").style.display = "none";
+        })
+        .catch(err => {
+          document.getElementById("loading").textContent = "❌ โหลดข้อมูลล้มเหลว: " + err.message;
+        });
+    }
 
     fetch(GAS_URL)
       .then(response => response.json())
