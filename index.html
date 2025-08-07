@@ -215,6 +215,15 @@
     font-weight: normal;
   }
 
+  .menu-label {
+  font-weight: bold;
+  color: #003f2d; /* สีเดียวกับค้นหาเอกสาร */
+  font-size: 1em; /* ขนาดเดียวกับ label ทั่วไป */
+  margin-right: 10px;
+  align-self: center;
+  }
+
+
   @media (max-width: 600px) {
     table, thead, tbody, th, td, tr {
       display: block;
@@ -249,6 +258,7 @@
       <h2>ระบบค้นหาทะเบียนรายการเอกสารระบบคุณภาพ (Master List Document)</h2>
     </div>
     <div class="menu-buttons-right">
+      <label class="menu-label">📌 เมนู</label>
       <button onclick="switchCategory('master')">📋 Master List</button>
       <button onclick="switchCategory('patient')">🧾 Patient Instruction</button>
     </div>
