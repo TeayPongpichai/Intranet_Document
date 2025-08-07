@@ -230,6 +230,15 @@
       width: 100%;
       margin-top: 5px;
     }
+    .highlight-red {
+    color: red;
+    font-weight: bold;
+  }
+
+  .normal-black {
+    color: black;
+    font-weight: normal;
+  }
   }
 </style>
 </head>
@@ -255,14 +264,15 @@
 
   <table id="documentTable">
     <colgroup>
-      <col style="width: 60px;">
-      <col style="width: 120px;">
-      <col style="width: 60px;">
-      <col style="width: 360px;">
-      <col style="width: 120px;">
-      <col style="width: 120px;">
-      <col style="width: 60px;">
-    </colgroup>
+    <col style="width: 60px;">
+    <col style="width: 120px;">
+    <col style="width: 60px;">
+    <col style="width: 360px;">
+    <col style="width: 120px;">
+    <col style="width: 120px;">
+    <col style="width: 140px;">
+    <col style="width: 60px;">
+</colgroup>
     <thead>
       <tr>
         <th onclick="sortByDept()" style="cursor:pointer;">หน่วยงาน ⬍</th>
@@ -271,6 +281,7 @@
         <th>รายการ</th>
         <th>ประกาศใช้</th>
         <th>ประเภทไฟล์</th>
+        <th>รูปแบบการปริ้น</th> <!-- ✅ คอลัมน์ใหม่ -->
         <th>Download</th>
       </tr>
     </thead>
@@ -346,15 +357,28 @@
 
   pageData.forEach(item => {
     const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${item.dept}</td>
-      <td>${item.code}</td>
-      <td>${item.rev}</td>
-      <td>${item.title}</td>
-      <td>${formatDate(item.startDate)}</td>
-      <td>${item.fileType || '-'}</td>
-      <td><a href="${item.link}" target="_blank">Click</a></td>
-    `;
+    // ✅ แก้ใน renderTable() ส่วน row.innerHTML
+  row.innerHTML = `
+    <td>${item.dept}</td>
+    <td>${item.code}</td>
+    <td>${item.rev}</td>
+    <td>${item.title}</td>
+    <td>${formatDate(item.startDate)}</td>
+    <td>${item.fileType || '-'}</td>
+    <td>
+      <span class="${
+        item.printType === 'ปริ้นหน้า-หลัง'
+          ? 'highlight-red'
+          : item.printType === '-'
+            ? 'normal-black'
+            : ''
+      }">
+        ${item.printType || '-'}
+      </span>
+    </td>
+    <td><a href="${item.link}" target="_blank">Click</a></td>
+  `;
+
     fragment.appendChild(row);
   });
 
