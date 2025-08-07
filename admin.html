@@ -219,7 +219,7 @@
     <label>🔎 ค้นหาด้วยรหัสเอกสาร:</label>
     <input type="text" id="searchCode" placeholder="กรอกรหัสเอกสาร">
     <button onclick="searchDoc()">ค้นหา</button>
-    <button onclick="clearForm()">🧹 ล้าง</button>
+    <button onclick="clearForm()">ล้าง</button>
 
     <hr>
 
@@ -252,7 +252,11 @@
             <label><input type="radio" name="fileTypeRadio" value="other">อื่น ๆ:</label>
             <input type="text" id="fileType" placeholder="ระบุ เช่น PPT, TXT" disabled>
           </div>
-
+          <label>🖨️ รูปแบบการปริ้น:</label>
+          <div class="filetype-radio">
+          <label><input type="radio" name="printType" value="-" checked> ไม่มี</label>
+          <label><input type="radio" name="printType" value="ปริ้นหน้า-หลัง"> ปริ้นหน้า-หลัง</label>
+          </div>
           <label>🔗 ลิงก์หรือ path:</label><br>
           <input type="text" id="link" required><br><br>
 
@@ -338,6 +342,8 @@
         document.getElementById('endDate').value = found.endDate;
         document.getElementById('fileType').value = found.fileType || "";
         document.getElementById('link').value = found.link;
+        const printRadio = document.querySelector(`input[name="printType"][value="${found.printType}"]`);
+        if (printRadio) printRadio.checked = true;
         const radio = document.querySelector(`input[name="category"][value="${found.category}"]`);
         if (radio) radio.checked = true;
         document.getElementById("status").textContent = "✏️ โหลดข้อมูลสำเร็จ พร้อมแก้ไข";
@@ -351,6 +357,7 @@
       document.getElementById('searchCode').value = "";
       document.getElementById('fileType').value = "";
       document.querySelector('input[name="category"][value="master"]').checked = true;
+      document.querySelector('input[name="printType"][value="-"]').checked = true;
       document.getElementById("status").textContent = "🧼 เคลียร์ข้อมูลแล้ว";
     }
 
@@ -383,7 +390,8 @@
         endDate: document.getElementById('endDate').value,
         fileType: document.getElementById('fileType').value,
         link: document.getElementById('link').value,
-        category: document.querySelector('input[name="category"]:checked').value
+        category: document.querySelector('input[name="category"]:checked').value,
+        printType: document.querySelector('input[name="printType"]:checked')?.value || "-"
       };
 
       const index = currentData.findIndex(item => item.code === doc.code);
