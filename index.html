@@ -366,31 +366,53 @@
   const pageData = data.slice(start, end);
 
   pageData.forEach(item => {
-    const row = document.createElement("tr");
-    // ✅ แก้ใน renderTable() ส่วน row.innerHTML
-  row.innerHTML = `
-    <td>${item.dept}</td>
-    <td>${item.code}</td>
-    <td>${item.rev}</td>
-    <td>${item.title}</td>
-    <td>${formatDate(item.startDate)}</td>
-    <td>${item.fileType || '-'}</td>
-    <td>
-      <span class="${
-        item.printType === 'ปริ้นหน้า-หลัง'
-          ? 'highlight-red'
-          : item.printType === '-'
-            ? 'normal-black'
-            : ''
-      }">
-        ${item.printType || '-'}
-      </span>
-    </td>
-    <td><a href="${item.link}" target="_blank">Click</a></td>
-  `;
+  const row = document.createElement("tr");
 
-    fragment.appendChild(row);
-  });
+  const tdDept = document.createElement("td");
+  tdDept.textContent = item.dept;
+  row.appendChild(tdDept);
+
+  const tdCode = document.createElement("td");
+  tdCode.textContent = item.code;
+  row.appendChild(tdCode);
+
+  const tdRev = document.createElement("td");
+  tdRev.textContent = item.rev;
+  row.appendChild(tdRev);
+
+  const tdTitle = document.createElement("td");
+  tdTitle.textContent = item.title;
+  row.appendChild(tdTitle);
+
+  const tdStart = document.createElement("td");
+  tdStart.textContent = formatDate(item.startDate);
+  row.appendChild(tdStart);
+
+  const tdFileType = document.createElement("td");
+  tdFileType.textContent = item.fileType || "-";
+  row.appendChild(tdFileType);
+
+  const tdPrintType = document.createElement("td");
+  const spanPrint = document.createElement("span");
+  spanPrint.textContent = item.printType || "-";
+  if (item.printType === 'ปริ้นหน้า-หลัง') {
+    spanPrint.className = "highlight-red";
+  } else if (item.printType === '-') {
+    spanPrint.className = "normal-black";
+  }
+  tdPrintType.appendChild(spanPrint);
+  row.appendChild(tdPrintType);
+
+  const tdLink = document.createElement("td");
+  const a = document.createElement("a");
+  a.href = item.link;
+  a.target = "_blank";
+  a.textContent = "Click";
+  tdLink.appendChild(a);
+  row.appendChild(tdLink);
+
+  fragment.appendChild(row);
+});
 
   tbody.innerHTML = "";       // ล้างของเก่า
   tbody.appendChild(fragment); // ✅ เพิ่มใหม่แบบรวดเร็ว
