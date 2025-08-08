@@ -259,7 +259,7 @@
     </div>
     <div class="menu-buttons-right">
       <label class="menu-label">📌 เมนู</label>
-      <button onclick="switchCategory('master')">📋 Master List</button>
+      <button onclick="switchCategory('master')">📋 Form</button>
       <button onclick="switchCategory('patient')">🧾 Patient Instruction</button>
     </div>
   </div>
@@ -312,29 +312,16 @@
     let sortAsc = true;
     let currentCategory = 'master'; // ✅ ตั้งค่า default category
 
-    function switchCategory(cat) {
-      currentCategory = cat;
-      currentPage = 1;
-      document.getElementById("loading").style.display = "block";
-      document.getElementById("loading").textContent = "⏳ กำลังโหลดข้อมูลใหม่ กรุณารอสักครู่...";
-
-      fetch(GAS_URL)
-        .then(response => response.json())
-        .then(data => {
-          const today = new Date();
-          allData = data.filter(item => {
-            const start = new Date(item.startDate);
-            const end = item.endDate ? new Date(item.endDate) : null;
-            return start <= today && (!end || end >= today);
-          });
-          renderTable(filteredData());
-          document.getElementById("loading").style.display = "none";
-        })
-        .catch(err => {
-          document.getElementById("loading").textContent = "❌ โหลดข้อมูลล้มเหลว: " + err.message;
-        });
-    }
-
+   function switchCategory(cat) {
+  currentCategory = cat;
+  currentPage = 1;
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("loading").textContent = "⏳ กำลังเปลี่ยนเมนู...";
+  setTimeout(() => {
+    renderTable(filteredData());
+    document.getElementById("loading").style.display = "none";
+  }, 200); // หน่วงนิดเดียวเพื่อให้ user เห็นข้อความ
+  }
     fetch(GAS_URL)
       .then(response => response.json())
       .then(data => {
@@ -403,14 +390,13 @@
   tdPrintType.appendChild(spanPrint);
   row.appendChild(tdPrintType);
 
- const tdLink = document.createElement("td");
-const a = document.createElement("a");
-a.href = item.link;
-// a.target = "_blank";   // ✅ แนะนำเอาออก เพื่อไม่ให้เปิดแท็บใหม่
-a.textContent = "Download";
-a.setAttribute("download", makeDownloadName(item)); // ✅ บรรทัดสำคัญ
-tdLink.appendChild(a);
-row.appendChild(tdLink);
+  const tdLink = document.createElement("td");
+  const a = document.createElement("a");
+  a.href = item.link;
+  a.target = "_blank";
+  a.textContent = "Click";
+  tdLink.appendChild(a);
+  row.appendChild(tdLink);
 
   fragment.appendChild(row);
 });
@@ -495,12 +481,6 @@ row.appendChild(tdLink);
       sortAsc = !sortAsc;
       currentPage = 1;
       renderTable(filteredData());
-    }
-    function makeDownloadName(item){
-      const ext = (item.link.split('.').pop() || '').toLowerCase();
-      const safe = (s) => String(s || '').trim().replace(/\s+/g, '_');
-      // ตั้งชื่อเช่น OED_OED14_rev1_OED14.pdf
-      return `${safe(item.dept)}_${safe(item.code)}_rev${safe(item.rev)}_${safe(item.title)}${ext ? '.'+ext : ''}`;
     }
   </script>
 </body>
