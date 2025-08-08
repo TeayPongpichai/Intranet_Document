@@ -457,14 +457,14 @@
     }
 
     function filteredData() {
-      const dept = document.getElementById("searchDept").value.toLowerCase();
-      const title = document.getElementById("searchTitle").value.toLowerCase();
-      return allData
-        .filter(item => item.category === currentCategory)
-        .filter(item =>
-          item.dept.toLowerCase().includes(dept) &&
-          item.title.toLowerCase().includes(title)
-        );
+  const dept = document.getElementById("searchDept").value.toLowerCase();
+  const title = document.getElementById("searchTitle").value.toLowerCase();
+  return allData
+    .filter(item => item._cat === currentCategory)
+    .filter(item =>
+      item._dept.includes(dept) &&
+      item._title.includes(title)
+    );
     }
 
     document.getElementById("searchDept").addEventListener("input", () => {
