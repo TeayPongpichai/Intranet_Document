@@ -323,17 +323,24 @@
   }, 200); // หน่วงนิดเดียวเพื่อให้ user เห็นข้อความ
   }
     fetch(GAS_URL)
-      .then(response => response.json())
-      .then(data => {
-        const today = new Date();
-        allData = data.filter(item => {
-          const start = new Date(item.startDate);
-          const end = item.endDate ? new Date(item.endDate) : null;
-          return start <= today && (!end || end >= today);
-        });
-        switchCategory('master'); // ✅ เริ่มต้นด้วย Master List
-        document.getElementById("loading").style.display = "none";
+  .then(response => response.json())
+  .then(data => {
+    const today = new Date();
+    allData = data
+      .filter(item => {
+        const start = new Date(item.startDate);
+        const end = item.endDate ? new Date(item.endDate) : null;
+        return start <= today && (!end || end >= today);
       })
+      .map(item => ({
+        ...item,
+        _dept: (item.dept || "").toLowerCase(),
+        _title: (item.title || "").toLowerCase(),
+        _cat: (item.category || "").toLowerCase()
+      }));
+    switchCategory('master'); // ✅ เริ่มต้นด้วย Master List
+    document.getElementById("loading").style.display = "none";
+  })
       .catch(err => {
         document.getElementById("loading").textContent = "❌ โหลดข้อมูลล้มเหลว: " + err.message;
       });
