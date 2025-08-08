@@ -403,15 +403,32 @@
   tdPrintType.appendChild(spanPrint);
   row.appendChild(tdPrintType);
 
- const tdLink = document.createElement("td");
-const a = document.createElement("a");
-a.href = item.link;
-// a.target = "_blank";   // ✅ แนะนำเอาออก เพื่อไม่ให้เปิดแท็บใหม่
-a.textContent = "Download";
-a.setAttribute("download", makeDownloadName(item)); // ✅ บรรทัดสำคัญ
-tdLink.appendChild(a);
-row.appendChild(tdLink);
+  const tdLink = document.createElement("td");
+  const btn = document.createElement("button");
+  btn.textContent = "Download";
+  btn.addEventListener("click", async () => {
+    try {
+      // เช็คว่าไฟล์โหลดได้หรือไม่ (ไม่ต้องโหลดเต็ม แค่ HEAD)
+      const res = await fetch(item.link, { method: 'HEAD' });
+      if (!res.ok) {
+        alert("❌ ไม่พบไฟล์ หรือไฟล์เสียหาย");
+        return;
+      }
 
+      // ถ้าผ่าน ให้สร้างลิงก์ดาวน์โหลดจริง
+      const a = document.createElement("a");
+      a.href = item.link;
+      a.setAttribute("download", makeDownloadName(item));
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      alert("⚠️ เกิดข้อผิดพลาดในการโหลดไฟล์: " + err.message);
+    }
+  });
+  tdLink.appendChild(btn);
+  row.appendChild(tdLink);
+  
   fragment.appendChild(row);
 });
 
