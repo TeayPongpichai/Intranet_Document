@@ -403,13 +403,14 @@
   tdPrintType.appendChild(spanPrint);
   row.appendChild(tdPrintType);
 
-  const tdLink = document.createElement("td");
-  const a = document.createElement("a");
-  a.href = item.link;
-  a.target = "_blank";
-  a.textContent = "Click";
-  tdLink.appendChild(a);
-  row.appendChild(tdLink);
+ const tdLink = document.createElement("td");
+const a = document.createElement("a");
+a.href = item.link;
+// a.target = "_blank";   // ✅ แนะนำเอาออก เพื่อไม่ให้เปิดแท็บใหม่
+a.textContent = "Download";
+a.setAttribute("download", makeDownloadName(item)); // ✅ บรรทัดสำคัญ
+tdLink.appendChild(a);
+row.appendChild(tdLink);
 
   fragment.appendChild(row);
 });
@@ -494,6 +495,12 @@
       sortAsc = !sortAsc;
       currentPage = 1;
       renderTable(filteredData());
+    }
+    function makeDownloadName(item){
+      const ext = (item.link.split('.').pop() || '').toLowerCase();
+      const safe = (s) => String(s || '').trim().replace(/\s+/g, '_');
+      // ตั้งชื่อเช่น OED_OED14_rev1_OED14.pdf
+      return `${safe(item.dept)}_${safe(item.code)}_rev${safe(item.rev)}_${safe(item.title)}${ext ? '.'+ext : ''}`;
     }
   </script>
 </body>
