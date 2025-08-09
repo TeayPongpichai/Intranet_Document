@@ -286,11 +286,13 @@
       </div>
     </div>
   </div>
-
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbykNCPNYmKCuCaA7mUcusnHEAQqmSomudpmPJDYp2qucwuzBDR_lNWJH2YYSJaMBo2KuA/exec';
     const ADMIN_PASSWORD = '1234';
     let currentData = [];
+    let expiredPage = 1;
+    let expiredTotalPages = 1;
+    const EXPIRED_PAGE_SIZE = 10;
 
     function checkPassword() {
       const input = document.getElementById("adminPassword").value;
@@ -308,16 +310,38 @@
         .then(res => res.json())
         .then(data => {
           currentData = data;
-          renderExpiredTable();
+          expiredPage = 1;           // ✅ รีเซ็ตหน้า
+          renderExpiredTable();      // ✅ เรนเดอร์พร้อมแบ่งหน้า
         });
     }
 
     function renderExpiredTable() {
-      const tbody = document.querySelector("#expiredTable tbody");
-      tbody.innerHTML = "";
-      const today = new Date();
-      const expired = currentData.filter(item => item.endDate && new Date(item.endDate) < today);
-      expired.forEach(item => {
+    const tbody = document.querySelector("#expiredTable tbody");
+    tbody.innerHTML = "";
+
+    const today = new Date();
+
+    // คัดเฉพาะรายการหมดอายุแล้ว และเรียงจากสิ้นสุดใหม่→เก่า (เปลี่ยนเป็นเก่า→ใหม่ได้ตามต้องการ)
+    const expired = currentData
+      .filter(item => item.endDate && new Date(item.endDate) < today)
+      .sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
+
+    // คำนวณจำนวนหน้า
+    expiredTotalPages = Math.max(1, Math.ceil(expired.length / EXPIRED_PAGE_SIZE));
+
+    // กันกรณีหน้าเกินขอบเขต
+    if (expiredPage > expiredTotalPages) expiredPage = expiredTotalPages;
+
+    // ตัดข้อมูลตามหน้า
+    const start = (expiredPage - 1) * EXPIRED_PAGE_SIZE;
+    const pageItems = expired.slice(start, start + EXPIRED_PAGE_SIZE);
+
+    if (pageItems.length === 0) {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td colspan="6" style="text-align:center;">— ไม่พบรายการหมดอายุ —</td>`;
+      tbody.appendChild(row);
+    } else {
+      pageItems.forEach(item => {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${item.dept}</td>
@@ -329,6 +353,51 @@
         `;
         tbody.appendChild(row);
       });
+    }
+
+    // เรนเดอร์ปุ่มแบ่งหน้า
+    renderExpiredPagination();
+  }
+      function renderExpiredPagination() {
+    const container = document.getElementById("expiredPagination");
+    container.innerHTML = "";
+
+    // ถ้ามีแค่หน้าเดียว ไม่ต้องแสดงปุ่ม
+    if (expiredTotalPages <= 1) return;
+
+    // ตัวช่วยสร้างปุ่ม
+    const makeBtn = (label, onClick, disabled = false) => {
+      const btn = document.createElement("button");
+      btn.textContent = label;
+      btn.className = "green-button";
+      btn.style.marginRight = "6px";
+      btn.disabled = disabled;
+      btn.onclick = onClick;
+      return btn;
+    };
+
+    // ปุ่มก่อนหน้า
+    container.appendChild(
+      makeBtn("⏮ ก่อนหน้า", () => goExpiredPage(expiredPage - 1), expiredPage === 1)
+    );
+
+    // แสดงสถานะหน้า
+    const info = document.createElement("span");
+    info.textContent = ` หน้า ${expiredPage} / ${expiredTotalPages} `;
+    info.style.margin = "0 8px";
+    info.style.fontWeight = "bold";
+    container.appendChild(info);
+
+    // ปุ่มถัดไป
+    container.appendChild(
+      makeBtn("ถัดไป ⏭", () => goExpiredPage(expiredPage + 1), expiredPage === expiredTotalPages)
+    );
+  }
+
+    function goExpiredPage(target) {
+      // บีบให้อยู่ในช่วง [1, expiredTotalPages]
+      expiredPage = Math.min(Math.max(1, target), expiredTotalPages);
+      renderExpiredTable();
     }
 
     function searchDoc() {
