@@ -267,6 +267,7 @@
   <div class="search-container">
     <label>ค้นหาเอกสาร 🔎</label>
     <input type="text" id="searchDept" placeholder="ค้นหาหน่วยงาน">
+    <input type="text" id="searchCode" placeholder="ค้นหารหัสเอกสาร">
     <input type="text" id="searchTitle" placeholder="ค้นหารายการเอกสาร">
   </div>
 
@@ -301,7 +302,7 @@
   <div id="pagination"></div>
 
   <footer>
-    พัฒนาโดย ฝ่ายพัฒนาประสิทธิภาพองค์กร | หากพบปัญหาการใช้งาน กรุณาติดต่อฝ่ายพัฒนาคุณภาพ (งานบริหารระบบเอกสารคุณภาพ) เบอร์ 5150, 5153
+    พัฒนาโดย ฝ่ายพัฒนาประสิทธิภาพองค์กร [OED] | หากพบปัญหาการใช้งาน กรุณาติดต่อฝ่ายพัฒนาคุณภาพ (งานบริหารระบบเอกสารคุณภาพ) เบอร์ 5150, 5153
   </footer>
 
   <script>
@@ -458,11 +459,13 @@
 
     function filteredData() {
   const dept = document.getElementById("searchDept").value.toLowerCase();
+  const code = document.getElementById("searchCode").value.toLowerCase(); // ✅ เพิ่มตัวแปร
   const title = document.getElementById("searchTitle").value.toLowerCase();
   return allData
     .filter(item => item._cat === currentCategory)
     .filter(item =>
       item._dept.includes(dept) &&
+      (item.code || "").toLowerCase().includes(code) && // ✅ กรองรหัสเอกสาร
       item._title.includes(title)
     );
     }
@@ -472,6 +475,10 @@
       renderTable(filteredData());
     });
 
+    document.getElementById("searchCode").addEventListener("input", () => { // ✅ เพิ่มช่องค้นหารหัสเอกสาร
+      currentPage = 1;
+      renderTable(filteredData());
+    });
     document.getElementById("searchTitle").addEventListener("input", () => {
       currentPage = 1;
       renderTable(filteredData());
