@@ -16,9 +16,7 @@
     align-items: center;
     gap: 15px;
   }
-  .header img {
-    height: 60px;
-  }
+  .header img { height: 60px; }
   .header h2 {
     color: #3B7168;
     margin: 0;
@@ -38,9 +36,8 @@
     cursor: pointer;
     font-weight: bold;
   }
-  .menu-buttons-right button:hover {
-    background-color: #2b5a52;
-  }
+  .menu-buttons-right button:hover { background-color: #2b5a52; }
+
   .search-container {
     margin: 15px 0;
     display: flex;
@@ -56,28 +53,13 @@
     padding: 5px;
     width: 200px;
   }
+
   #loading {
     font-style: italic;
     color: gray;
     margin-bottom: 10px;
   }
-  #pagination {
-    margin-top: 15px;
-    text-align: center;
-  }
-  #pagination button {
-    background-color: #3B7168;
-    color: white;
-    padding: 6px 12px;
-    margin: 0 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  #pagination button:hover {
-    background-color: #2b5a52;
-  }
+
   footer {
     background-color: #3B7168;
     color: white;
@@ -88,32 +70,19 @@
     font-weight: bold;
   }
 
-  #documentTable th {
-    text-align: center;
-  }
-  #documentTable td {
-    text-align: center;
-  }
-  #documentTable td:nth-child(4) {
-    text-align: left;
-  }
-  #documentTable.loading {
-    display: none;
-  }
+  #documentTable th { text-align: center; }
+  #documentTable td { text-align: center; }
+  #documentTable td:nth-child(4) { text-align: left; }
+  #documentTable.loading { display: none; }
 
   /* 🎯 CSS จาก style.css เริ่มตรงนี้ */
-
   body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background-color: #eaf2ec;
     color: #003f2d;
     margin: 30px;
   }
-
-  h2 {
-    color: #003f2d;
-    margin-bottom: 20px;
-  }
+  h2 { color: #003f2d; margin-bottom: 20px; }
 
   table {
     width: 100%;
@@ -121,17 +90,12 @@
     background-color: white;
     box-shadow: 0 0 8px rgba(0,0,0,0.1);
   }
-
   th, td {
     padding: 10px;
     border-bottom: 1px solid #ccc;
     text-align: left;
   }
-
-  th {
-    background-color: #3B7168;
-    color: white;
-  }
+  th { background-color: #3B7168; color: white; }
 
   button, .green-button {
     background-color: #3B7168;
@@ -142,10 +106,7 @@
     cursor: pointer;
     font-weight: bold;
   }
-
-  button:hover {
-    background-color: #2b5a52;
-  }
+  button:hover { background-color: #2b5a52; }
 
   input[type="text"], input[type="date"], input[type="password"] {
     padding: 6px;
@@ -154,35 +115,13 @@
     border: 1px solid #ccc;
     border-radius: 4px;
   }
+  a { color: #3B7168; text-decoration: none; font-weight: bold; }
+  a:hover { text-decoration: underline; }
 
-  a {
-    color: #3B7168;
-    text-decoration: none;
-    font-weight: bold;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  .status {
-    margin-top: 10px;
-    font-weight: bold;
-    color: #00695c;
-  }
-
-  .status.error {
-    color: red;
-  }
-
-  .status.success {
-    color: green;
-  }
-
-  .status.loading {
-    color: #888;
-    font-style: italic;
-  }
+  .status { margin-top: 10px; font-weight: bold; color: #00695c; }
+  .status.error { color: red; }
+  .status.success { color: green; }
+  .status.loading { color: #888; font-style: italic; }
 
   form {
     margin-top: 20px;
@@ -193,61 +132,52 @@
     max-width: 600px;
     box-shadow: 0 0 5px rgba(0,0,0,0.05);
   }
-
   form label {
     display: block;
     margin-top: 10px;
     font-weight: bold;
     color: #004d40;
   }
+  form input { display: block; margin-bottom: 10px; }
 
-  form input {
-    display: block;
-    margin-bottom: 10px;
-  }
-     .highlight-red {
-    color: red;
-    font-weight: bold;
-  }
-
-  .normal-black {
-    color: black;
-    font-weight: normal;
-  }
+  .highlight-red { color: red; font-weight: bold; }
+  .normal-black { color: black; font-weight: normal; }
 
   .menu-label {
-  font-weight: bold;
-  color: #003f2d; /* สีเดียวกับค้นหาเอกสาร */
-  font-size: 1em; /* ขนาดเดียวกับ label ทั่วไป */
-  margin-right: 10px;
-  align-self: center;
+    font-weight: bold;
+    color: #003f2d;
+    font-size: 1em;
+    margin-right: 10px;
+    align-self: center;
   }
 
+  /* ✅ กล่องตารางแบบเลื่อนด้วยเมาส์ (แทน pagination) */
+  .table-scroll {
+    /* max-height จะถูกตั้งด้วย JS ให้พอดี 12 แถว + header */
+    overflow-y: auto;
+    border-radius: 6px;
+    background: white;
+    box-shadow: 0 0 8px rgba(0,0,0,0.06);
+  }
+
+  /* (ตัวเลือก) ทำหัวตารางให้ sticky */
+  #documentTable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #3B7168; /* ต้องระบุซ้ำตอน sticky */
+    color: #fff;
+  }
 
   @media (max-width: 600px) {
     table, thead, tbody, th, td, tr {
       display: block;
       width: 100%;
     }
-
-    th {
-      text-align: right;
-      padding-right: 30%;
-    }
-
-    td {
-      text-align: left;
-      padding-left: 5%;
-    }
-
-    input[type="text"], input[type="date"], input[type="password"] {
-      width: 100%;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 5px;
-    }
+    th { text-align: right; padding-right: 30%; }
+    td { text-align: left; padding-left: 5%; }
+    input[type="text"], input[type="date"], input[type="password"] { width: 100%; }
+    button { width: 100%; margin-top: 5px; }
   }
 </style>
 </head>
@@ -273,33 +203,35 @@
 
   <div id="loading">⏳ Loading ข้อมูลเอกสาร กรุณารอสักครู่...</div>
 
-  <table id="documentTable">
-    <colgroup>
-    <col style="width: 60px;">
-    <col style="width: 120px;">
-    <col style="width: 40px;">
-    <col style="width: 360px;">
-    <col style="width: 100px;">
-    <col style="width: 120px;">
-    <col style="width: 80px;">
-    <col style="width: 60px;">
-</colgroup>
-    <thead>
-      <tr>
-        <th onclick="sortByDept()" style="cursor:pointer;">หน่วยงาน ⬍</th>
-        <th>รหัสเอกสาร</th>
-        <th>Rev</th>
-        <th>รายการ</th>
-        <th>ประกาศใช้</th>
-        <th>ประเภทไฟล์</th>
-        <th>รูปแบบการปริ้น</th> <!-- ✅ คอลัมน์ใหม่ -->
-        <th>Download</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <div id="pagination"></div>
+  <!-- ✅ ครอบตารางด้วยกล่องเลื่อน -->
+  <div id="tableContainer" class="table-scroll">
+    <table id="documentTable">
+      <colgroup>
+        <col style="width: 60px;">
+        <col style="width: 120px;">
+        <col style="width: 40px;">
+        <col style="width: 360px;">
+        <col style="width: 100px;">
+        <col style="width: 120px;">
+        <col style="width: 80px;">
+        <col style="width: 60px;">
+      </colgroup>
+      <thead>
+        <tr>
+          <th onclick="sortByDept()" style="cursor:pointer;">หน่วยงาน ⬍</th>
+          <th>รหัสเอกสาร</th>
+          <th>Rev</th>
+          <th>รายการ</th>
+          <th>ประกาศใช้</th>
+          <th>ประเภทไฟล์</th>
+          <th>รูปแบบการปริ้น</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <!-- ❌ ไม่ใช้ pagination แล้ว จึงตัด div #pagination ออก -->
 
   <footer>
     พัฒนาโดย ฝ่ายพัฒนาประสิทธิภาพองค์กร [OED] | หากพบปัญหาการใช้งาน กรุณาติดต่อฝ่ายพัฒนาคุณภาพ (งานบริหารระบบเอกสารคุณภาพ) เบอร์ 5150, 5153
@@ -308,134 +240,130 @@
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbykNCPNYmKCuCaA7mUcusnHEAQqmSomudpmPJDYp2qucwuzBDR_lNWJH2YYSJaMBo2KuA/exec';
     let allData = [];
-    let currentPage = 1;
-    const itemsPerPage = 12;
     let sortAsc = true;
-    let currentCategory = 'master'; // ✅ ตั้งค่า default category
+    let currentCategory = 'master'; // ✅ default category
 
-   function switchCategory(cat) {
-  currentCategory = cat;
-  currentPage = 1;
-  document.getElementById("loading").style.display = "block";
-  document.getElementById("loading").textContent = "⏳ กำลังเปลี่ยนเมนู...";
-  setTimeout(() => {
-    renderTable(filteredData());
-    document.getElementById("loading").style.display = "none";
-  }, 200); // หน่วงนิดเดียวเพื่อให้ user เห็นข้อความ
-  }
+    function switchCategory(cat) {
+      currentCategory = cat;
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("loading").textContent = "⏳ กำลังเปลี่ยนเมนู...";
+      setTimeout(() => {
+        renderTable(filteredData());
+        document.getElementById("loading").style.display = "none";
+      }, 200);
+    }
+
+    // โหลดข้อมูลจาก GAS
     fetch(GAS_URL)
-  .then(response => response.json())
-  .then(data => {
-    const today = new Date();
-    allData = data
-      .filter(item => {
-        const start = new Date(item.startDate);
-        const end = item.endDate ? new Date(item.endDate) : null;
-        return start <= today && (!end || end >= today);
+      .then(response => response.json())
+      .then(data => {
+        const today = new Date();
+        allData = data
+          .filter(item => {
+            const start = new Date(item.startDate);
+            const end = item.endDate ? new Date(item.endDate) : null;
+            return start <= today && (!end || end >= today);
+          })
+          .map(item => ({
+            ...item,
+            _dept: (item.dept || "").toLowerCase(),
+            _title: (item.title || "").toLowerCase(),
+            _cat: (item.category || "").toLowerCase()
+          }));
+        switchCategory('master'); // ✅ เริ่มต้นด้วย Master List
+        document.getElementById("loading").style.display = "none";
       })
-      .map(item => ({
-        ...item,
-        _dept: (item.dept || "").toLowerCase(),
-        _title: (item.title || "").toLowerCase(),
-        _cat: (item.category || "").toLowerCase()
-      }));
-    switchCategory('master'); // ✅ เริ่มต้นด้วย Master List
-    document.getElementById("loading").style.display = "none";
-  })
       .catch(err => {
         document.getElementById("loading").textContent = "❌ โหลดข้อมูลล้มเหลว: " + err.message;
       });
 
+    // ✅ เรนเดอร์ตาราง “ทั้งหมด” แล้วจำกัดความสูงด้วย setScrollableRows(12)
     function renderTable(data) {
-  const table = document.getElementById("documentTable");
-  const tbody = document.querySelector("#documentTable tbody");
+      const table = document.getElementById("documentTable");
+      const tbody = document.querySelector("#documentTable tbody");
 
-  // ✅ ซ่อนตารางก่อนเริ่มโหลด
-  table.classList.add("loading");
+      table.classList.add("loading");
 
-  // ✅ สร้าง DocumentFragment
-  const fragment = document.createDocumentFragment();
+      const fragment = document.createDocumentFragment();
 
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const pageData = data.slice(start, end);
+      data.forEach(item => {
+        const row = document.createElement("tr");
 
-  pageData.forEach(item => {
-  const row = document.createElement("tr");
+        const tdDept = document.createElement("td");
+        tdDept.textContent = item.dept;
+        row.appendChild(tdDept);
 
-  const tdDept = document.createElement("td");
-  tdDept.textContent = item.dept;
-  row.appendChild(tdDept);
+        const tdCode = document.createElement("td");
+        tdCode.textContent = item.code;
+        row.appendChild(tdCode);
 
-  const tdCode = document.createElement("td");
-  tdCode.textContent = item.code;
-  row.appendChild(tdCode);
+        const tdRev = document.createElement("td");
+        tdRev.textContent = item.rev;
+        row.appendChild(tdRev);
 
-  const tdRev = document.createElement("td");
-  tdRev.textContent = item.rev;
-  row.appendChild(tdRev);
+        const tdTitle = document.createElement("td");
+        tdTitle.textContent = item.title;
+        row.appendChild(tdTitle);
 
-  const tdTitle = document.createElement("td");
-  tdTitle.textContent = item.title;
-  row.appendChild(tdTitle);
+        const tdStart = document.createElement("td");
+        tdStart.textContent = formatDate(item.startDate);
+        row.appendChild(tdStart);
 
-  const tdStart = document.createElement("td");
-  tdStart.textContent = formatDate(item.startDate);
-  row.appendChild(tdStart);
+        const tdFileType = document.createElement("td");
+        tdFileType.textContent = item.fileType || "-";
+        row.appendChild(tdFileType);
 
-  const tdFileType = document.createElement("td");
-  tdFileType.textContent = item.fileType || "-";
-  row.appendChild(tdFileType);
+        const tdPrintType = document.createElement("td");
+        const spanPrint = document.createElement("span");
+        spanPrint.textContent = item.printType || "-";
+        if (item.printType === 'ปริ้นหน้า-หลัง') {
+          spanPrint.className = "highlight-red";
+        } else if (item.printType === '-') {
+          spanPrint.className = "normal-black";
+        }
+        tdPrintType.appendChild(spanPrint);
+        row.appendChild(tdPrintType);
 
-  const tdPrintType = document.createElement("td");
-  const spanPrint = document.createElement("span");
-  spanPrint.textContent = item.printType || "-";
-  if (item.printType === 'ปริ้นหน้า-หลัง') {
-    spanPrint.className = "highlight-red";
-  } else if (item.printType === '-') {
-    spanPrint.className = "normal-black";
-  }
-  tdPrintType.appendChild(spanPrint);
-  row.appendChild(tdPrintType);
+        const tdLink = document.createElement("td");
+        const a = document.createElement("a");
+        a.href = item.link;
+        a.target = "_blank";
+        a.textContent = "Click";
+        tdLink.appendChild(a);
+        row.appendChild(tdLink);
 
-  const tdLink = document.createElement("td");
-  const a = document.createElement("a");
-  a.href = item.link;
-  a.target = "_blank";
-  a.textContent = "Click";
-  tdLink.appendChild(a);
-  row.appendChild(tdLink);
+        fragment.appendChild(row);
+      });
 
-  fragment.appendChild(row);
-});
+      tbody.innerHTML = "";       // ล้างของเก่า
+      tbody.appendChild(fragment); // เพิ่มใหม่แบบรวดเร็ว
 
-  tbody.innerHTML = "";       // ล้างของเก่า
-  tbody.appendChild(fragment); // ✅ เพิ่มใหม่แบบรวดเร็ว
+      table.classList.remove("loading");
 
-  renderPagination(data);
+      // ✅ ตั้งความสูงให้เห็น 12 แถว + header
+      setScrollableRows(12);
+    }
 
-  // ✅ แสดงตารางอีกครั้งหลังโหลดเสร็จ
-  table.classList.remove("loading");
-}
-    function renderPagination(data) {
-      const totalPages = Math.ceil(data.length / itemsPerPage);
-      const pagination = document.getElementById("pagination");
-      pagination.innerHTML = "";
-      if (totalPages <= 1) return;
+    // ✅ คำนวณความสูงของกล่องเลื่อนตามจำนวนแถวที่ต้องการให้เห็น (ค่าเริ่มต้น 12)
+    function setScrollableRows(n = 12) {
+      const container = document.getElementById("tableContainer");
+      const table = document.getElementById("documentTable");
+      const thead = table.querySelector("thead");
+      const firstRow = table.querySelector("tbody tr");
 
-      const createButton = (text, page) => {
-        const btn = document.createElement("button");
-        btn.textContent = text;
-        btn.onclick = () => {
-          currentPage = page;
-          renderTable(filteredData());
-        };
-        return btn;
-      };
+      if (!container) return;
 
-      if (currentPage > 1) pagination.appendChild(createButton("⏮ ก่อนหน้า", currentPage - 1));
-      pagination.appendChild(document.createTextNode(` หน้า ${currentPage} / ${totalPages} `));
-      if (currentPage < totalPages) pagination.appendChild(createButton("ถัดไป ⏭", currentPage + 1));
+      // ถ้ายังไม่มีแถว (ผลลัพธ์ว่าง) ปล่อยสูงอัตโนมัติ
+      if (!firstRow || !thead) {
+        container.style.maxHeight = "auto";
+        return;
+      }
+
+      const rowH = firstRow.getBoundingClientRect().height || 44;  // ค่าประมาณสำรอง
+      const headH = thead.getBoundingClientRect().height || 44;
+
+      // +2 กันเผื่อเส้นขอบ
+      container.style.maxHeight = Math.ceil(rowH * n + headH + 2) + "px";
     }
 
     function formatDate(isoDate) {
@@ -458,44 +386,43 @@
     }
 
     function filteredData() {
-  const dept = document.getElementById("searchDept").value.toLowerCase();
-  const code = document.getElementById("searchCode").value.toLowerCase(); // ✅ เพิ่มตัวแปร
-  const title = document.getElementById("searchTitle").value.toLowerCase();
-  return allData
-    .filter(item => item._cat === currentCategory)
-    .filter(item =>
-      item._dept.includes(dept) &&
-      (item.code || "").toLowerCase().includes(code) && // ✅ กรองรหัสเอกสาร
-      item._title.includes(title)
-    );
+      const dept = document.getElementById("searchDept").value.toLowerCase();
+      const code = document.getElementById("searchCode").value.toLowerCase();
+      const title = document.getElementById("searchTitle").value.toLowerCase();
+      return allData
+        .filter(item => item._cat === currentCategory)
+        .filter(item =>
+          item._dept.includes(dept) &&
+          (item.code || "").toLowerCase().includes(code) &&
+          item._title.includes(title)
+        );
     }
 
+    // ค้นหาแล้วเรนเดอร์ใหม่ (renderTable จะตั้งความสูง 12 แถวให้อัตโนมัติ)
     document.getElementById("searchDept").addEventListener("input", () => {
-      currentPage = 1;
       renderTable(filteredData());
     });
-
-    document.getElementById("searchCode").addEventListener("input", () => { // ✅ เพิ่มช่องค้นหารหัสเอกสาร
-      currentPage = 1;
+    document.getElementById("searchCode").addEventListener("input", () => {
       renderTable(filteredData());
     });
     document.getElementById("searchTitle").addEventListener("input", () => {
-      currentPage = 1;
       renderTable(filteredData());
     });
 
     function sortByDept() {
       allData.sort((a, b) => {
-        const nameA = a.dept.toLowerCase();
-        const nameB = b.dept.toLowerCase();
+        const nameA = (a.dept || "").toLowerCase();
+        const nameB = (b.dept || "").toLowerCase();
         if (nameA < nameB) return sortAsc ? -1 : 1;
         if (nameA > nameB) return sortAsc ? 1 : -1;
         return 0;
       });
       sortAsc = !sortAsc;
-      currentPage = 1;
       renderTable(filteredData());
     }
+
+    // ปรับความสูงใหม่เมื่อมีการเปลี่ยนขนาดหน้าต่าง (กันกรณีค่า row สูงขึ้น/ลง)
+    window.addEventListener('resize', () => setScrollableRows(12));
   </script>
 </body>
 </html>
