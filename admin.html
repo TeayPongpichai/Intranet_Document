@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Admin เพิ่มเอกสาร</title>
-   <style>
+  <style>
     /* ✅ CSS จาก style.css ที่รวมเข้ามา */
     body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -11,11 +11,7 @@
       color: #003f2d;
       margin: 30px;
     }
-
-    h2 {
-      color: #003f2d;
-      margin-bottom: 20px;
-    }
+    h2 { color: #003f2d; margin-bottom: 20px; }
 
     table {
       width: 100%;
@@ -25,18 +21,8 @@
       margin-top: 20px;
       font-size: 0.9em;
     }
-
-    th, td {
-      padding: 10px;
-      border-bottom: 1px solid #ccc;
-      text-align: left;
-    }
-
-    th {
-      background-color: #3B7168;
-      color: white;
-      font-weight: bold;
-    }
+    th, td { padding: 10px; border-bottom: 1px solid #ccc; text-align: left; }
+    th { background-color: #3B7168; color: white; font-weight: bold; }
 
     button, .green-button {
       background-color: #3B7168;
@@ -47,155 +33,49 @@
       cursor: pointer;
       font-weight: bold;
     }
-
-    button:hover {
-      background-color: #2b5a52;
-    }
+    button:hover { background-color: #2b5a52; }
 
     input[type="text"], input[type="date"], input[type="password"] {
-      padding: 6px;
-      margin: 4px 0;
-      width: 250px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 6px; margin: 4px 0; width: 250px;
+      border: 1px solid #ccc; border-radius: 4px;
     }
+    a { color: #3B7168; text-decoration: none; font-weight: bold; }
+    a:hover { text-decoration: underline; }
 
-    a {
-      color: #3B7168;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .status {
-      margin-top: 10px;
-      font-weight: bold;
-      color: #00695c;
-    }
-
-    .status.error {
-      color: red;
-    }
-
-    .status.success {
-      color: green;
-    }
-
-    .status.loading {
-      color: #888;
-      font-style: italic;
-    }
+    .status { margin-top: 10px; font-weight: bold; color: #00695c; }
+    .status.error { color: red; }
+    .status.success { color: green; }
+    .status.loading { color: #888; font-style: italic; }
 
     form {
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #ffffff;
-      border: 1px solid #c8e6c9;
-      border-radius: 6px;
-      max-width: 600px;
+      margin-top: 20px; padding: 10px; background-color: #ffffff;
+      border: 1px solid #c8e6c9; border-radius: 6px; max-width: 600px;
       box-shadow: 0 0 5px rgba(0,0,0,0.05);
     }
-
-    form label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-      color: #004d40;
-    }
-
-    form input {
-      display: block;
-      margin-bottom: 10px;
-    }
+    form label { display: block; margin-top: 10px; font-weight: bold; color: #004d40; }
+    form input { display: block; margin-bottom: 10px; }
 
     @media (max-width: 600px) {
-      table, thead, tbody, th, td, tr {
-        display: block;
-        width: 100%;
-      }
-
-      th {
-        text-align: right;
-        padding-right: 30%;
-      }
-
-      td {
-        text-align: left;
-        padding-left: 5%;
-      }
-
-      input[type="text"], input[type="date"], input[type="password"] {
-        width: 100%;
-      }
-
-      button {
-        width: 100%;
-        margin-top: 5px;
-      }
+      table, thead, tbody, th, td, tr { display: block; width: 100%; }
+      th { text-align: right; padding-right: 30%; }
+      td { text-align: left; padding-left: 5%; }
+      input[type="text"], input[type="date"], input[type="password"] { width: 100%; }
+      button { width: 100%; margin-top: 5px; }
     }
 
     /* ✅ CSS เดิมในไฟล์ Admin */
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
+    .category-radio { display: flex; gap: 20px; align-items: center; margin: 10px 0; }
+    .category-radio label { font-weight: bold; }
+    .filetype-radio { display: flex; gap: 15px; align-items: center; margin: 10px 0; }
+    .filetype-radio label { display: flex; align-items: center; gap: 5px; }
 
-    .category-radio {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      margin: 10px 0;
-    }
+    .expired-header { margin-top: 10px; font-size: 1em; font-weight: bold; color: #3B7168; }
+    .flex-container { display: flex; gap: 5px; align-items: flex-start; }
+    .left-form { flex: 3.5; min-width: 0; }
+    .right-expired { flex: 6.5; min-width: 0; }
 
-    .category-radio label {
-      font-weight: bold;
-    }
-
-    .filetype-radio {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      margin: 10px 0;
-    }
-
-    .filetype-radio label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .expired-header {
-      margin-top: 10px;
-      font-size: 1em;
-      font-weight: bold;
-      color: #3B7168;
-    }
-
-    .flex-container {
-      display: flex;
-      gap: 5px;
-      align-items: flex-start;
-    }
-
-    .left-form {
-      flex: 3.5;
-      min-width: 0;
-    }
-
-    .right-expired {
-      flex: 6.5;
-      min-width: 0;
-    }
-
-    #expiredTable th {
-      text-align: center;
-    }
-
-    #expiredTable td {
-      text-align: center;
-    }
+    #expiredTable th, #expiredTable td { text-align: center; }
   </style>
 </head>
 <body>
@@ -212,7 +92,7 @@
 
     <div class="category-radio">
       <label>📂 หมวดหมู่:</label>
-      <label><input type="radio" name="category" value="master" checked> 📋 Master List</label>
+      <label><input type="radio" name="category" value="master" checked> 📋 Form</label>
       <label><input type="radio" name="category" value="patient"> 📚 Patient Instruction</label>
     </div>
 
@@ -252,11 +132,13 @@
             <label><input type="radio" name="fileTypeRadio" value="other">อื่น ๆ:</label>
             <input type="text" id="fileType" placeholder="ระบุ เช่น PPT, TXT" disabled>
           </div>
+
           <label>🖨️ รูปแบบการปริ้น:</label>
           <div class="filetype-radio">
-          <label><input type="radio" name="printType" value="-" checked> ไม่มี</label>
-          <label><input type="radio" name="printType" value="ปริ้นหน้า-หลัง"> ปริ้นหน้า-หลัง</label>
+            <label><input type="radio" name="printType" value="-" checked> ไม่มี</label>
+            <label><input type="radio" name="printType" value="ปริ้นหน้า-หลัง"> ปริ้นหน้า-หลัง</label>
           </div>
+
           <label>🔗 ลิงก์หรือ path:</label><br>
           <input type="text" id="link" required><br><br>
 
@@ -286,170 +168,135 @@
       </div>
     </div>
   </div>
+
   <script>
+    /* ===== ค่าใช้งาน ===== */
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbykNCPNYmKCuCaA7mUcusnHEAQqmSomudpmPJDYp2qucwuzBDR_lNWJH2YYSJaMBo2KuA/exec';
     const ADMIN_PASSWORD = '1234';
+
+    /* ===== ตัวแปรใช้งาน ===== */
     let currentData = [];
     let expiredPage = 1;
     let expiredTotalPages = 1;
     const EXPIRED_PAGE_SIZE = 10;
 
+    /* ===== Auth แบบง่าย ===== */
     function checkPassword() {
       const input = document.getElementById("adminPassword").value;
       if (input === ADMIN_PASSWORD) {
         document.getElementById("passwordSection").style.display = "none";
         document.getElementById("adminPanel").classList.remove("hidden");
-        loadData();
+        loadData(); // ไม่ต้อง await
       } else {
         document.getElementById("passwordStatus").textContent = "❌ รหัสผ่านไม่ถูกต้อง";
       }
     }
 
-    function loadData() {
-      fetch(GAS_URL)
-        .then(res => res.json())
-        .then(data => {
-          currentData = data;
-          expiredPage = 1;           // ✅ รีเซ็ตหน้า
-          renderExpiredTable();      // ✅ เรนเดอร์พร้อมแบ่งหน้า
-        });
-    }
-
+    /* ===== แสดงตารางรายการหมดอายุ ===== */
     function renderExpiredTable() {
-    const tbody = document.querySelector("#expiredTable tbody");
-    tbody.innerHTML = "";
+      const tbody = document.querySelector("#expiredTable tbody");
+      tbody.innerHTML = "";
 
-    const today = new Date();
+      const today = new Date();
 
-    // คัดเฉพาะรายการหมดอายุแล้ว และเรียงจากสิ้นสุดใหม่→เก่า (เปลี่ยนเป็นเก่า→ใหม่ได้ตามต้องการ)
-    const expired = currentData
-      .filter(item => item.endDate && new Date(item.endDate) < today)
-      .sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
+      // คัดเฉพาะรายการหมดอายุแล้ว เรียงใหม่→เก่า
+      const expired = currentData
+        .filter(item => item.endDate && new Date(item.endDate) < today)
+        .sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
 
-    // คำนวณจำนวนหน้า
-    expiredTotalPages = Math.max(1, Math.ceil(expired.length / EXPIRED_PAGE_SIZE));
+      expiredTotalPages = Math.max(1, Math.ceil(expired.length / EXPIRED_PAGE_SIZE));
+      if (expiredPage > expiredTotalPages) expiredPage = expiredTotalPages;
 
-    // กันกรณีหน้าเกินขอบเขต
-    if (expiredPage > expiredTotalPages) expiredPage = expiredTotalPages;
+      const start = (expiredPage - 1) * EXPIRED_PAGE_SIZE;
+      const pageItems = expired.slice(start, start + EXPIRED_PAGE_SIZE);
 
-    // ตัดข้อมูลตามหน้า
-    const start = (expiredPage - 1) * EXPIRED_PAGE_SIZE;
-    const pageItems = expired.slice(start, start + EXPIRED_PAGE_SIZE);
-
-    if (pageItems.length === 0) {
-      const row = document.createElement("tr");
-      row.innerHTML = `<td colspan="6" style="text-align:center;">— ไม่พบรายการหมดอายุ —</td>`;
-      tbody.appendChild(row);
-    } else {
-      pageItems.forEach(item => {
+      if (pageItems.length === 0) {
         const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${item.dept}</td>
-          <td>${item.code}</td>
-          <td>${item.startDate}</td>
-          <td>${item.endDate}</td>
-          <td>${item.fileType || '-'}</td>
-          <td><a href="${item.link}" target="_blank">Click</a></td>
-        `;
+        row.innerHTML = `<td colspan="6" style="text-align:center;">— ไม่พบรายการหมดอายุ —</td>`;
         tbody.appendChild(row);
-      });
+      } else {
+        pageItems.forEach(item => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${item.dept}</td>
+            <td>${item.code}</td>
+            <td>${item.startDate}</td>
+            <td>${item.endDate}</td>
+            <td>${item.fileType || '-'}</td>
+            <td><a href="${item.link}" target="_blank">Click</a></td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      renderExpiredPagination();
     }
 
-    // เรนเดอร์ปุ่มแบ่งหน้า
-    renderExpiredPagination();
-  }
-      function renderExpiredPagination() {
-    const container = document.getElementById("expiredPagination");
-    container.innerHTML = "";
+    function renderExpiredPagination() {
+      const container = document.getElementById("expiredPagination");
+      container.innerHTML = "";
+      if (expiredTotalPages <= 1) return;
 
-    // ถ้ามีแค่หน้าเดียว ไม่ต้องแสดงปุ่ม
-    if (expiredTotalPages <= 1) return;
+      const makeBtn = (label, onClick, disabled = false) => {
+        const btn = document.createElement("button");
+        btn.textContent = label;
+        btn.className = "green-button";
+        btn.style.marginRight = "6px";
+        btn.disabled = disabled;
+        btn.onclick = onClick;
+        return btn;
+      };
 
-    // ตัวช่วยสร้างปุ่ม
-    const makeBtn = (label, onClick, disabled = false) => {
-      const btn = document.createElement("button");
-      btn.textContent = label;
-      btn.className = "green-button";
-      btn.style.marginRight = "6px";
-      btn.disabled = disabled;
-      btn.onclick = onClick;
-      return btn;
-    };
+      container.appendChild(
+        makeBtn("⏮ ก่อนหน้า", () => goExpiredPage(expiredPage - 1), expiredPage === 1)
+      );
 
-    // ปุ่มก่อนหน้า
-    container.appendChild(
-      makeBtn("⏮ ก่อนหน้า", () => goExpiredPage(expiredPage - 1), expiredPage === 1)
-    );
+      const info = document.createElement("span");
+      info.textContent = ` หน้า ${expiredPage} / ${expiredTotalPages} `;
+      info.style.margin = "0 8px";
+      info.style.fontWeight = "bold";
+      container.appendChild(info);
 
-    // แสดงสถานะหน้า
-    const info = document.createElement("span");
-    info.textContent = ` หน้า ${expiredPage} / ${expiredTotalPages} `;
-    info.style.margin = "0 8px";
-    info.style.fontWeight = "bold";
-    container.appendChild(info);
-
-    // ปุ่มถัดไป
-    container.appendChild(
-      makeBtn("ถัดไป ⏭", () => goExpiredPage(expiredPage + 1), expiredPage === expiredTotalPages)
-    );
-  }
+      container.appendChild(
+        makeBtn("ถัดไป ⏭", () => goExpiredPage(expiredPage + 1), expiredPage === expiredTotalPages)
+      );
+    }
 
     function goExpiredPage(target) {
-      // บีบให้อยู่ในช่วง [1, expiredTotalPages]
       expiredPage = Math.min(Math.max(1, target), expiredTotalPages);
       renderExpiredTable();
     }
 
-    function searchDoc() {
-      const code = document.getElementById('searchCode').value.trim();
-      const found = currentData.find(item => item.code === code);
-      if (found) {
-        document.getElementById('dept').value = found.dept;
-        document.getElementById('code').value = found.code;
-        document.getElementById('rev').value = found.rev;
-        document.getElementById('title').value = found.title;
-        document.getElementById('startDate').value = found.startDate;
-        document.getElementById('endDate').value = found.endDate;
-        document.getElementById('fileType').value = found.fileType || "";
-        document.getElementById('link').value = found.link;
-        const printRadio = document.querySelector(`input[name="printType"][value="${found.printType}"]`);
-        if (printRadio) printRadio.checked = true;
-        const radio = document.querySelector(`input[name="category"][value="${found.category}"]`);
-        if (radio) radio.checked = true;
-        document.getElementById("status").textContent = "✏️ โหลดข้อมูลสำเร็จ พร้อมแก้ไข";
-      } else {
-        document.getElementById("status").textContent = "❌ ไม่พบรหัสเอกสารนี้";
+    /* ===== โหลดข้อมูลทั้งหมด ===== */
+    async function loadData() {
+      try {
+        const url = `${GAS_URL}?action=read`;
+        const res = await fetch(url, { method: 'GET' });
+        const text = await res.text(); // อ่านเป็น text เพื่อ debug ง่าย
+        if (!res.ok) {
+          console.error('GET failed:', res.status, res.statusText, text);
+          throw new Error(`HTTP ${res.status}`);
+        }
+        const data = text ? JSON.parse(text) : [];
+        currentData = Array.isArray(data) ? data : [];
+        expiredPage = 1;
+        renderExpiredTable();
+        return currentData;
+      } catch (err) {
+        console.error('loadData error:', err);
+        document.getElementById("status").textContent = "⚠️ โหลดข้อมูลไม่สำเร็จ (ดู Console)";
+        return [];
       }
     }
 
-    function clearForm() {
-      document.getElementById('docForm').reset();
-      document.getElementById('searchCode').value = "";
-      document.getElementById('fileType').value = "";
-      document.querySelector('input[name="category"][value="master"]').checked = true;
-      document.querySelector('input[name="printType"][value="-"]').checked = true;
-      document.getElementById("status").textContent = "🧼 เคลียร์ข้อมูลแล้ว";
-    }
-
-    document.querySelectorAll('input[name="fileTypeRadio"]').forEach(radio => {
-      radio.addEventListener('change', function () {
-        const fileTypeInput = document.getElementById('fileType');
-        if (this.value === 'other') {
-          fileTypeInput.disabled = false;
-          fileTypeInput.value = '';
-        } else {
-          fileTypeInput.disabled = true;
-          fileTypeInput.value = this.value;
-        }
-      });
-    });
-
+    /* ===== เพิ่ม/แก้ไข เอกสาร ===== */
     async function addDoc() {
       if (!document.getElementById('docForm').checkValidity()) {
         document.getElementById("status").textContent = "⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง";
         return;
       }
-      await loadData();
+
+      await loadData(); // โหลดล่าสุดก่อนแก้
 
       const doc = {
         dept: document.getElementById('dept').value,
@@ -464,48 +311,121 @@
         printType: document.querySelector('input[name="printType"]:checked')?.value || "-"
       };
 
+      // อัปเดตใน currentData
       const index = currentData.findIndex(item => item.code === doc.code);
-      if (index !== -1) {
-        currentData[index] = doc;
-      } else {
-        currentData.push(doc);
+      if (index !== -1) currentData[index] = doc;
+      else currentData.push(doc);
+
+      try {
+        const res = await fetch(GAS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" }, // simple request
+          body: JSON.stringify({ action: "write", data: currentData })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (json?.ok === false) throw new Error(json.error || "GAS not ok");
+
+        clearForm();
+        document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";
+        loadData();
+      } catch (err) {
+        console.error("addDoc write error:", err);
+        document.getElementById("status").textContent = "❌ บันทึกไม่สำเร็จ (เปิด Console ดูรายละเอียด)";
       }
-
-      const res = await fetch(GAS_URL, {
-        method: "POST",
-        body: JSON.stringify(currentData)
-      });
-
-      await res.json();
-      clearForm();
-      document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";
-      loadData();
     }
 
+    /* ===== ลบ เอกสาร ===== */
     async function deleteDoc() {
       const code = document.getElementById('code').value.trim();
       if (!code) {
         document.getElementById("status").textContent = "⚠️ ต้องใส่รหัสเอกสารก่อนลบ";
         return;
       }
+
       await loadData();
+
       const index = currentData.findIndex(item => item.code === code);
       if (index === -1) {
         document.getElementById("status").textContent = "❌ ไม่พบเอกสารที่จะลบ";
         return;
       }
+
       if (!confirm(`คุณแน่ใจว่าต้องการลบเอกสาร ${code} ?`)) return;
       currentData.splice(index, 1);
-      const res = await fetch(GAS_URL, {
-        method: "POST",
-        body: JSON.stringify(currentData)
-      });
-      await res.json();
-      clearForm();
-      document.getElementById("status").textContent = "🗑️ ลบสำเร็จ";
-      loadData();
+
+      try {
+        const res = await fetch(GAS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "write", data: currentData })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (json?.ok === false) throw new Error(json.error || "GAS not ok");
+
+        clearForm();
+        document.getElementById("status").textContent = "🗑️ ลบสำเร็จ";
+        loadData();
+      } catch (err) {
+        console.error("deleteDoc write error:", err);
+        document.getElementById("status").textContent = "❌ ลบไม่สำเร็จ (เปิด Console ดูรายละเอียด)";
+      }
     }
 
+    /* ===== ค้นหาเอกสารตามรหัส ===== */
+    function searchDoc() {
+      const code = document.getElementById('searchCode').value.trim();
+      const found = currentData.find(item => item.code === code);
+      if (found) {
+        document.getElementById('dept').value = found.dept || "";
+        document.getElementById('code').value = found.code || "";
+        document.getElementById('rev').value = found.rev || "";
+        document.getElementById('title').value = found.title || "";
+        document.getElementById('startDate').value = found.startDate || "";
+        document.getElementById('endDate').value = found.endDate || "";
+        document.getElementById('fileType').value = found.fileType || "";
+        document.getElementById('link').value = found.link || "";
+
+        const printRadio = document.querySelector(`input[name="printType"][value="${found.printType}"]`);
+        if (printRadio) printRadio.checked = true;
+
+        const catRadio = document.querySelector(`input[name="category"][value="${found.category}"]`);
+        if (catRadio) catRadio.checked = true;
+
+        document.getElementById("status").textContent = "✏️ โหลดข้อมูลสำเร็จ พร้อมแก้ไข";
+      } else {
+        document.getElementById("status").textContent = "❌ ไม่พบรหัสเอกสารนี้";
+      }
+    }
+
+    /* ===== ล้างฟอร์ม ===== */
+    function clearForm() {
+      document.getElementById('docForm').reset();
+      document.getElementById('searchCode').value = "";
+      document.getElementById('fileType').value = "";
+      document.querySelector('input[name="category"][value="master"]').checked = true;
+      document.querySelector('input[name="printType"][value="-"]').checked = true;
+      document.getElementById("status").textContent = "🧼 เคลียร์ข้อมูลแล้ว";
+    }
+
+    /* ===== เปลี่ยนพฤติกรรมช่อง fileType ตาม radio ===== */
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('input[name="fileTypeRadio"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+          const fileTypeInput = document.getElementById('fileType');
+          if (this.value === 'other') {
+            fileTypeInput.disabled = false;
+            fileTypeInput.value = '';
+          } else {
+            fileTypeInput.disabled = true;
+            fileTypeInput.value = this.value;
+          }
+        });
+      });
+    });
+
+    /* ===== กด Enter ที่ช่องรหัสผ่าน ===== */
     document.getElementById("adminPassword").addEventListener("keypress", function (e) {
       if (e.key === "Enter") {
         e.preventDefault();
