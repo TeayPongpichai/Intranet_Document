@@ -79,7 +79,7 @@
   </style>
 </head>
 <body>
-  <h2>เข้าสู่ระบบผู้ดูแล (Admin)</h2>
+  <h2>เข้าสู่ระบบผู้ดูแล (Admin) V.2</h2>
 
   <div id="passwordSection">
     <input type="password" id="adminPassword" placeholder="กรอกรหัสผ่าน">
@@ -268,110 +268,133 @@
     }
 
     /* ===== โหลดข้อมูลทั้งหมด ===== */
-    async function loadData() {
-      try {
-        const url = `${GAS_URL}?action=read`;
-        const res = await fetch(url, { method: 'GET' });
-        const text = await res.text(); // อ่านเป็น text เพื่อ debug ง่าย
-        if (!res.ok) {
-          console.error('GET failed:', res.status, res.statusText, text);
-          throw new Error(`HTTP ${res.status}`);
-        }
-        const data = text ? JSON.parse(text) : [];
-        currentData = Array.isArray(data) ? data : [];
-        expiredPage = 1;
-        renderExpiredTable();
-        return currentData;
-      } catch (err) {
-        console.error('loadData error:', err);
-        document.getElementById("status").textContent = "⚠️ โหลดข้อมูลไม่สำเร็จ (ดู Console)";
-        return [];
-      }
-    }
+ // ของใหม่ (ปลอดภัย)
+async function loadData() {
+      try {
+        const url = `${GAS_URL}?action=read`;
+        const res = await fetch(url, { method: 'GET' });
+        const text = await res.text(); // อ่านเป็น text เพื่อ debug ง่าย
+        
+        if (!res.ok) {
+          console.error('GET failed:', res.status, res.statusText, text);
+          throw new Error(`HTTP ${res.status}`);
+        }
+        
+        const data = text ? JSON.parse(text) : [];
+        
+        // 🎯 จุดแก้ไขที่ 1: ตรวจสอบข้อมูลที่ได้
+        if (!Array.isArray(data)) {
+          console.error("โหลดข้อมูลล้มเหลว: ข้อมูลที่ได้จาก GAS ไม่ใช่ Array", data);
+          throw new Error("ข้อมูลที่ได้รับจากเซิร์ฟเวอร์ไม่ถูกต้อง");
+        }
 
-    /* ===== เพิ่ม/แก้ไข เอกสาร ===== */
-    async function addDoc() {
-      if (!document.getElementById('docForm').checkValidity()) {
-        document.getElementById("status").textContent = "⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง";
-        return;
-      }
+        // ถ้าผ่านจุดนี้ได้ แปลว่าข้อมูลปลอดภัย
+        currentData = data; 
+        expiredPage = 1;
+        renderExpiredTable();
+        return currentData;
 
-      await loadData(); // โหลดล่าสุดก่อนแก้
+      } catch (err) {
+        console.error('loadData error:', err);
+        document.getElementById("status").textContent = "⚠️ โหลดข้อมูลไม่สำเร็จ (ดู Console)";
+        
+        // 🎯 จุดแก้ไขที่ 2: ต้องโยน Error ต่อ
+        // เพื่อให้ addDoc หรือ deleteDoc ที่เรียกฟังก์ชันนี้ รู้ตัวว่าล้มเหลว
+        throw err; 
+      }
+}
 
-      const doc = {
-        dept: document.getElementById('dept').value,
-        code: document.getElementById('code').value,
-        rev: document.getElementById('rev').value,
-        title: document.getElementById('title').value,
-        startDate: document.getElementById('startDate').value,
-        endDate: document.getElementById('endDate').value,
-        fileType: document.getElementById('fileType').value,
-        link: document.getElementById('link').value,
-        category: document.querySelector('input[name="category"]:checked').value,
-        printType: document.querySelector('input[name="printType"]:checked')?.value || "-"
-      };
+// ของใหม่ (ปลอดภัย)
+async function addDoc() {
+      if (!document.getElementById('docForm').checkValidity()) {
+        document.getElementById("status").textContent = "⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง";
+        return;
+      }
 
-      // อัปเดตใน currentData
-      const index = currentData.findIndex(item => item.code === doc.code);
-      if (index !== -1) currentData[index] = doc;
-      else currentData.push(doc);
+      try {
+        // 🎯 จุดแก้ไข: ย้าย loadData() มาไว้ใน try
+        await loadData(); // ถ้าล้มเหลว จะกระโดดไป catch ทันที
 
-      try {
-        const res = await fetch(GAS_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" }, // simple request
-          body: JSON.stringify({ action: "write", data: currentData })
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = await res.json();
-        if (json?.ok === false) throw new Error(json.error || "GAS not ok");
+        const doc = {
+          dept: document.getElementById('dept').value,
+          code: document.getElementById('code').value,
+          rev: document.getElementById('rev').value,
+          title: document.getElementById('title').value,
+          startDate: document.getElementById('startDate').value,
+          endDate: document.getElementById('endDate').value,
+          fileType: document.getElementById('fileType').value,
+          link: document.getElementById('link').value,
+          category: document.querySelector('input[name="category"]:checked').value,
+          printType: document.querySelector('input[name="printType"]:checked')?.value || "-"
+        };
 
-        clearForm();
-        document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";
-        loadData();
-      } catch (err) {
-        console.error("addDoc write error:", err);
-        document.getElementById("status").textContent = "❌ บันทึกไม่สำเร็จ (เปิด Console ดูรายละเอียด)";
-      }
-    }
+        // อัปเดตใน currentData
+        const index = currentData.findIndex(item => item.code === doc.code);
+        if (index !== -1) currentData[index] = doc;
+        else currentData.push(doc);
 
-    /* ===== ลบ เอกสาร ===== */
-    async function deleteDoc() {
-      const code = document.getElementById('code').value.trim();
-      if (!code) {
-        document.getElementById("status").textContent = "⚠️ ต้องใส่รหัสเอกสารก่อนลบ";
-        return;
-      }
+        // ถ้า loadData ผ่าน ค่อยเริ่ม POST
+        const res = await fetch(GAS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" }, 
+          body: JSON.stringify({ action: "write", data: currentData })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (json?.ok === false) throw new Error(json.error || "GAS not ok");
 
-      await loadData();
+        clearForm();
+        document.getElementById("status").textContent = "✅ บันทึกสำเร็จ";
+        loadData(); // โหลดซ้ำหลังบันทึก (อันนี้ไม่เป็นไร)
+      
+      } catch (err) {
+        // 🎯 catch นี้จะทำงานทั้งเมื่อ loadData() ล้มเหลว และ POST ล้มเหลว
+        console.error("addDoc write error:", err);
+        document.getElementById("status").textContent = "❌ บันทึกไม่สำเร็จ (อาจเกิดจากโหลดข้อมูลล้มเหลว โปรดลองอีกครั้ง)";
+      }
+}
 
-      const index = currentData.findIndex(item => item.code === code);
-      if (index === -1) {
-        document.getElementById("status").textContent = "❌ ไม่พบเอกสารที่จะลบ";
-        return;
-      }
+ // ของใหม่ (ปลอดภัย)
+async function deleteDoc() {
+      const code = document.getElementById('code').value.trim();
+      if (!code) {
+        document.getElementById("status").textContent = "⚠️ ต้องใส่รหัสเอกสารก่อนลบ";
+        return;
+      }
 
-      if (!confirm(`คุณแน่ใจว่าต้องการลบเอกสาร ${code} ?`)) return;
-      currentData.splice(index, 1);
+      try {
+        // 🎯 จุดแก้ไข: ย้าย loadData() มาไว้ใน try
+        await loadData();
 
-      try {
-        const res = await fetch(GAS_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "write", data: currentData })
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = await res.json();
-        if (json?.ok === false) throw new Error(json.error || "GAS not ok");
+        const index = currentData.findIndex(item => item.code === code);
+        if (index === -1) {
+          document.getElementById("status").textContent = "❌ ไม่พบเอกสารที่จะลบ";
+          return; // หยุดถ้าไม่เจอ
+        }
 
-        clearForm();
-        document.getElementById("status").textContent = "🗑️ ลบสำเร็จ";
-        loadData();
-      } catch (err) {
-        console.error("deleteDoc write error:", err);
-        document.getElementById("status").textContent = "❌ ลบไม่สำเร็จ (เปิด Console ดูรายละเอียด)";
-      }
-    }
+        if (!confirm(`คุณแน่ใจว่าต้องการลบเอกสาร ${code} ?`)) return;
+        currentData.splice(index, 1);
+
+        // ถ้า loadData ผ่าน และยืนยัน ค่อยเริ่ม POST
+        const res = await fetch(GAS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "write", data: currentData })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (json?.ok === false) throw new Error(json.error || "GAS not ok");
+
+        clearForm();
+        document.getElementById("status").textContent = "🗑️ ลบสำเร็จ";
+        loadData();
+      
+      } catch (err) {
+        // 🎯 catch นี้จะทำงานทั้งเมื่อ loadData() ล้มเหลว และ POST ล้มเหลว
+        console.error("deleteDoc write error:", err);
+        document.getElementById("status").textContent = "❌ ลบไม่สำเร็จ (อาจเกิดจากโหลดข้อมูลล้มเหลว โปรดลองอีกครั้ง)";
+      }
+}
 
     /* ===== ค้นหาเอกสารตามรหัส ===== */
     function searchDoc() {
